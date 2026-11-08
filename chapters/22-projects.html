@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>21 · Real projects: headers, linking, CMake — Ground Up C++</title>
+<meta name="description" content="Split code into files, understand the linker, build with CMake, use libraries.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="22-projects">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">III · Building your own types</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html"><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details><summary>I · The basics</summary><ol><li><a href="02-hello.html"><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html"><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details open><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html"><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html" class=cur><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html"><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">III · Building your own types</div>
+        <h1><span class="n">21</span> Real projects: headers, linking, CMake</h1>
+        <p class="sum">Split code into files, understand the linker, build with CMake, use libraries.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#splitting-code-headers-and-source-files">Splitting code: headers and source files</a></li><li class="l2"><a href="#how-it-compiles-translation-units-and-the-linker">How it compiles: translation units and the linker</a></li><li class="l2"><a href="#why-separate-compilation-is-worth-it">Why separate compilation is worth it</a></li><li class="l2"><a href="#cmake-the-standard-build-system">CMake: the standard build system</a></li><li class="l2"><a href="#using-libraries">Using libraries</a></li><li class="l2"><a href="#a-typical-project-layout">A typical project layout</a></li></ol></nav>
+      <p>Real programs are spread over many files, built by a build system, and use third-party libraries. This chapter explains how the pieces fit: <strong>headers</strong>, <strong>translation units</strong>, the <strong>linker</strong>, and <strong>CMake</strong>. Most confusing C++ build errors make sense once you have this picture.</p>
+<h2 id="splitting-code-headers-and-source-files">Splitting code: headers and source files</h2>
+<p>A <strong>header</strong> (<code>.hpp</code> or <code>.h</code>) contains <em>declarations</em>: what exists. A <strong>source file</strong> (<code>.cpp</code>) contains <em>definitions</em>: how it works. Other files <code>#include</code> the header to use the code.</p>
+<div class="code"><div class="code-title file">📄 geometry.hpp</div><pre class="src"><code><span class="cp">#pragma once                     </span><span class="c1">// include this file's contents only once per translation unit</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">geo</span><span class="w"> </span><span class="p">{</span><span class="w">                  </span><span class="c1">// a namespace groups names and prevents clashes</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="n">Point</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="n">b</span><span class="p">);</span><span class="w">                  </span><span class="c1">// declarations only</span>
+<span class="kt">double</span><span class="w"> </span><span class="nf">path_length</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace geo</span>
+</code></pre></div>
+<div class="code"><div class="code-title file">📄 geometry.cpp</div><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"geometry.hpp"</span><span class="w">          </span><span class="c1">// quotes: a file from this project; &lt;...&gt;: a library header</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">geo</span><span class="w"> </span><span class="p">{</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="n">Point</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hypot</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">path_length</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">distance</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace geo</span>
+</code></pre></div>
+<div class="code run"><div class="code-title">main.cpp</div><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"geometry.hpp"</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geo</span><span class="o">::</span><span class="n">Point</span><span class="o">&gt;</span><span class="w"> </span><span class="n">route</span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">}};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"route length: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">geo</span><span class="o">::</span><span class="n">path_length</span><span class="p">(</span><span class="n">route</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp geometry.cpp -o prog</span></div><div class="out"><div class="out-h">Output</div><pre>route length: 11</pre></div></div>
+<p>Built with <code>g++ -std=c++23 main.cpp geometry.cpp -o prog</code>.</p>
+<h2 id="how-it-compiles-translation-units-and-the-linker">How it compiles: translation units and the linker</h2>
+<div class="code"><pre class="src plain"><code> main.cpp  ──(#include geometry.hpp)──▶ compile ──▶ main.o     ┐
+                                                                ├──▶ link ──▶ prog
+ geometry.cpp ─(#include geometry.hpp)─▶ compile ──▶ geometry.o ┘
+</code></pre></div>
+<ul>
+<li>Each <code>.cpp</code> file, plus everything it <code>#include</code>s, is a <strong>translation unit</strong>, compiled <strong>independently</strong> into an object file (<code>.o</code>).</li>
+<li><code>main.o</code> contains a <em>reference</em> to <code>geo::path_length</code> but not its code. It only saw the declaration.</li>
+<li>The <strong>linker</strong> joins the object files and fills in every reference with the matching definition.</li>
+</ul>
+<p>So the two classic build errors come from different stages:</p>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Stage</th>
+<th>Usual cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'foo' was not declared in this scope</code></td>
+<td>compiler</td>
+<td>missing <code>#include</code> or typo</td>
+</tr>
+<tr>
+<td><code>undefined reference to 'foo'</code></td>
+<td>linker</td>
+<td>declared but never defined, or you didn't compile/link the <code>.cpp</code> (or library) that defines it</td>
+</tr>
+<tr>
+<td><code>multiple definition of 'foo'</code></td>
+<td>linker</td>
+<td>a non-inline function or variable <em>defined</em> in a header included by several <code>.cpp</code> files</td>
+</tr>
+</tbody>
+</table>
+<p>Here is the classic linker error: we declare <code>distance</code> but forget to compile <code>geometry.cpp</code>:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"geometry.hpp"</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">geo</span><span class="o">::</span><span class="n">distance</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">}));</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span></div><div class="out err"><div class="out-h">Compiler error (this is the point of the example)</div><pre>/usr/bin/ld: /tmp/ccjUFkLj.o: in function `main&#x27;:
+main.cpp:(.text.startup+0x2f): undefined reference to `geo::distance(geo::Point, geo::Point)&#x27;
+collect2: error: ld returned 1 exit status</pre></div></div>
+<p>The <strong>one-definition rule (ODR)</strong>: every function and variable must be defined exactly once in the whole program. Exceptions are <code>inline</code> functions, templates and class definitions, which may appear in every translation unit that includes them, provided all the copies are identical. That's why templates and small <code>inline</code> functions can live entirely in headers.</p>
+<h2 id="why-separate-compilation-is-worth-it">Why separate compilation is worth it</h2>
+<p>When you change <code>geometry.cpp</code>, only that file is recompiled, and then the program is relinked. In a project with 5,000 files that is the difference between seconds and an hour. Headers should be small and include only what they need, because every file that includes a header is recompiled when the header changes.</p>
+<h2 id="cmake-the-standard-build-system">CMake: the standard build system</h2>
+<p><strong>CMake</strong> describes your project once and generates build files for any platform: Makefiles, Ninja, Visual Studio or Xcode. Nearly every open-source C++ project uses it.</p>
+<div class="code"><pre class="src plain"><code><span class="c"># CMakeLists.txt</span>
+<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.20</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">geo_demo</span><span class="w"> </span><span class="s">LANGUAGES</span><span class="w"> </span><span class="s">CXX</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span><span class="w"> </span><span class="s">23</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
+
+<span class="nb">add_library</span><span class="p">(</span><span class="s">geo</span><span class="w"> </span><span class="s">geometry.cpp</span><span class="p">)</span><span class="w">                        </span><span class="c"># a library from our geometry code</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">geo</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_compile_options</span><span class="p">(</span><span class="s">geo</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">-Wall</span><span class="w"> </span><span class="s">-Wextra</span><span class="p">)</span>
+
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">app</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span><span class="w">                         </span><span class="c"># the program</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">geo</span><span class="p">)</span><span class="w">               </span><span class="c"># link it against the library</span>
+</code></pre></div>
+<div class="code"><pre class="src plain"><code>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w">   </span><span class="c1"># configure: generate build files into ./build</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>-j<span class="w">                           </span><span class="c1"># build in parallel</span>
+./build/app
+</code></pre></div>
+<p>Build types: <code>Debug</code> (<code>-g</code>, no optimisation), <code>Release</code> (<code>-O3 -DNDEBUG</code>), <code>RelWithDebInfo</code> (optimised with debug info, which is best for profiling). Add sanitizers to a debug build with <code>-DCMAKE_CXX_FLAGS="-fsanitize=address,undefined"</code>.</p>
+<p>The modern CMake style is <strong>target-based</strong>: attach include directories, options and dependencies to targets (<code>target_...</code>) rather than setting global variables. <code>PUBLIC</code> means “I need this and so do my users”; <code>PRIVATE</code> means “only I need this”.</p>
+<h2 id="using-libraries">Using libraries</h2>
+<table>
+<thead>
+<tr>
+<th>Way</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Header-only libraries</strong></td>
+<td>copy the headers in, <code>#include</code> them. Examples: <code>nlohmann/json</code>, <code>fmt</code> (header-only mode), <code>stb_image</code>, <code>doctest</code>.</td>
+</tr>
+<tr>
+<td><strong>System packages</strong></td>
+<td><code>sudo apt install libsdl2-dev</code>, then <code>find_package(SDL2 REQUIRED)</code> and <code>target_link_libraries(app PRIVATE SDL2::SDL2)</code></td>
+</tr>
+<tr>
+<td><strong>CMake FetchContent</strong></td>
+<td>CMake downloads a library at configure time (shown below)</td>
+</tr>
+<tr>
+<td><strong>Package managers</strong></td>
+<td><strong>vcpkg</strong> or <strong>Conan</strong>: like <code>pip</code> for C++</td>
+</tr>
+</tbody>
+</table>
+<div class="code"><pre class="src plain"><code><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span>
+<span class="nb">FetchContent_Declare</span><span class="p">(</span><span class="s">fmt</span><span class="w"> </span><span class="s">GIT_REPOSITORY</span><span class="w"> </span><span class="s">https://github.com/fmtlib/fmt</span><span class="w"> </span><span class="s">GIT_TAG</span><span class="w"> </span><span class="s">10.2.1</span><span class="p">)</span>
+<span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">fmt</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">fmt::fmt</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Static</strong> libraries (<code>.a</code>, <code>.lib</code>) are copied into your program at link time. <strong>Shared</strong> libraries (<code>.so</code>, <code>.dll</code>, <code>.dylib</code>) are loaded when the program starts, so they can be updated separately and shared between programs. In CMake: <code>add_library(geo STATIC ...)</code> or <code>add_library(geo SHARED ...)</code>.</p>
+<h2 id="a-typical-project-layout">A typical project layout</h2>
+<div class="code"><pre class="src plain"><code>myengine/
+├── CMakeLists.txt
+├── include/myengine/     public headers (what users #include)
+│   └── math.hpp
+├── src/                  implementation files
+│   └── math.cpp
+├── apps/                 executables that use the library
+│   └── demo.cpp
+├── tests/                unit tests (chapter 36)
+│   └── test_math.cpp
+└── third_party/          vendored dependencies
+</code></pre></div>
+<div class="box tip">
+<p class="box-h">Tip: C++20 modules</p>
+<p>C++20 introduced <strong>modules</strong> (<code>export module geo;</code> and <code>import geo;</code>) to replace headers with something faster and cleaner. Compiler and build-system support has matured through 2024–2026, and new projects can start using them with recent CMake, Clang, GCC 14+ and MSVC. You will still read header-based code for many years, so the model above remains essential.</p>
+</div>
+<div class="quiz"><div class="quiz-h">Check yourself</div><div class="q"><p class="qq">You get <code>undefined reference to 'geo::distance(...)'</code>. What's the most likely cause?</p><ol><li><button type="button" class="qopt" data-ok="1">The .cpp file (or library) that defines it was not compiled or linked</button></li><li><button type="button" class="qopt" data-ok="0">A missing #include</button></li><li><button type="button" class="qopt" data-ok="0">A syntax error</button></li></ol><p class="why" hidden>The compiler saw the declaration; the linker couldn't find a definition. </p></div><div class="q"><p class="qq">Why can templates be defined in headers without multiple-definition errors?</p><ol><li><button type="button" class="qopt" data-ok="1">The one-definition rule allows identical template (and inline) definitions in every translation unit</button></li><li><button type="button" class="qopt" data-ok="0">Headers are compiled only once</button></li><li><button type="button" class="qopt" data-ok="0">The linker ignores templates</button></li></ol><p class="why" hidden>Ordinary non-inline function definitions in headers do cause multiple-definition errors. </p></div><div class="q"><p class="qq">What does <code>#pragma once</code> prevent?</p><ol><li><button type="button" class="qopt" data-ok="1">The same header being pasted twice into one translation unit</button></li><li><button type="button" class="qopt" data-ok="0">The file being compiled</button></li><li><button type="button" class="qopt" data-ok="0">Linker errors</button></li></ol><p class="why" hidden>Older code uses include guards (#ifndef ... #define ... #endif) for the same purpose. </p></div></div>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="21-errors.html"><small>Previous</small>20 · Errors: exceptions, optional, expected</a><a class="next" href="../index.html"><small>Back to</small>Contents</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

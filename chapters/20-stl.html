@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>19 · The standard library: containers and algorithms — Ground Up C++</title>
+<meta name="description" content="map, unordered_map, set, deque; iterators, algorithms and lambdas; Big-O.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="20-stl">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">III · Building your own types</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html"><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details><summary>I · The basics</summary><ol><li><a href="02-hello.html"><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html"><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details open><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html" class=cur><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html"><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html"><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">III · Building your own types</div>
+        <h1><span class="n">19</span> The standard library: containers and algorithms</h1>
+        <p class="sum">map, unordered_map, set, deque; iterators, algorithms and lambdas; Big-O.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#big-o-in-one-minute">Big-O in one minute</a></li><li class="l2"><a href="#the-containers">The containers</a></li><li class="l2"><a href="#maps-dictionaries">Maps: dictionaries</a></li><li class="l2"><a href="#iterators-the-glue-between-containers-and-algorithms">Iterators: the glue between containers and algorithms</a></li><li class="l2"><a href="#algorithms">Algorithms</a></li><li class="l2"><a href="#lambdas-in-depth-captures">Lambdas in depth: captures</a></li><li class="l2"><a href="#choosing-a-container-the-practical-rules">Choosing a container: the practical rules</a></li></ol></nav>
+      <p>The C++ <strong>standard library</strong> gives you battle-tested containers and around a hundred algorithms. Knowing which container to choose, and what each operation costs, is one of the biggest differences between beginner and expert C++. This chapter is your map.</p>
+<h2 id="big-o-in-one-minute">Big-O in one minute</h2>
+<p><strong>Big-O</strong> describes how the work grows as the data grows:</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Name</th>
+<th>Example</th>
+<th>1,000 items → 1,000,000 items</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O(1)</td>
+<td>constant</td>
+<td><code>v[i]</code>, hash-map lookup (average)</td>
+<td>same time</td>
+</tr>
+<tr>
+<td>O(log n)</td>
+<td>logarithmic</td>
+<td><code>std::map</code> lookup, binary search</td>
+<td>~2× longer</td>
+</tr>
+<tr>
+<td>O(n)</td>
+<td>linear</td>
+<td>scanning a vector</td>
+<td>1000× longer</td>
+</tr>
+<tr>
+<td>O(n log n)</td>
+<td></td>
+<td>sorting</td>
+<td>~2000× longer</td>
+</tr>
+<tr>
+<td>O(n²)</td>
+<td>quadratic</td>
+<td>comparing every pair</td>
+<td>1,000,000× longer</td>
+</tr>
+</tbody>
+</table>
+<p>Big-O ignores constant factors, and in real programs constant factors are often decided by the <strong>CPU cache</strong> (chapter 26). That is why <code>std::vector</code> usually beats “theoretically better” containers for small and medium sizes.</p>
+<h2 id="the-containers">The containers</h2>
+<table>
+<thead>
+<tr>
+<th>Container</th>
+<th>Python analogue</th>
+<th>Structure</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std::vector&lt;T&gt;</code></td>
+<td><code>list</code></td>
+<td>contiguous dynamic array</td>
+<td><strong>the default for almost everything</strong></td>
+</tr>
+<tr>
+<td><code>std::array&lt;T, N&gt;</code></td>
+<td>tuple of fixed length</td>
+<td>fixed contiguous array</td>
+<td>small fixed-size data (coordinates, matrices)</td>
+</tr>
+<tr>
+<td><code>std::deque&lt;T&gt;</code></td>
+<td><code>collections.deque</code></td>
+<td>blocks of arrays</td>
+<td>fast push/pop at both ends</td>
+</tr>
+<tr>
+<td><code>std::list&lt;T&gt;</code></td>
+<td>—</td>
+<td>doubly linked list</td>
+<td>rarely; stable references with frequent middle insertions</td>
+</tr>
+<tr>
+<td><code>std::unordered_map&lt;K, V&gt;</code></td>
+<td><code>dict</code></td>
+<td>hash table</td>
+<td>lookup by key, O(1) average</td>
+</tr>
+<tr>
+<td><code>std::map&lt;K, V&gt;</code></td>
+<td><code>dict</code> kept sorted</td>
+<td>balanced tree (red-black)</td>
+<td>sorted keys, ranges, order books (chapter 33)</td>
+</tr>
+<tr>
+<td><code>std::unordered_set&lt;T&gt;</code> / <code>std::set&lt;T&gt;</code></td>
+<td><code>set</code> / sorted set</td>
+<td>hash / tree</td>
+<td>membership tests, unique items</td>
+</tr>
+<tr>
+<td><code>std::priority_queue&lt;T&gt;</code></td>
+<td><code>heapq</code></td>
+<td>binary heap on a vector</td>
+<td>always get the largest (or smallest) next: schedulers, Dijkstra</td>
+</tr>
+<tr>
+<td><code>std::string</code></td>
+<td><code>str</code></td>
+<td>contiguous chars</td>
+<td>text</td>
+</tr>
+</tbody>
+</table>
+<h2 id="maps-dictionaries">Maps: dictionaries</h2>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"the cat and the dog and the bird"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">counts</span><span class="p">;</span><span class="w">      </span><span class="c1">// a hash map: Python dict</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">istringstream</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">w</span><span class="p">;)</span><span class="w"> </span><span class="o">++</span><span class="n">counts</span><span class="p">[</span><span class="n">w</span><span class="p">];</span><span class="w">        </span><span class="c1">// [] creates the entry (with 0) if missing</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"the: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">counts</span><span class="p">[</span><span class="s">"the"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", and: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">counts</span><span class="p">[</span><span class="s">"and"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="n">counts</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">counts</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w">   </span><span class="c1">// a tree map: keys come out sorted</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">word</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">sorted</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">word</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'='</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">' '</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sorted</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">"cat"</span><span class="p">);</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sorted</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"found cat: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sorted</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"fish"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span><span class="w">   </span><span class="c1">// C++20</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuI2luY2x1ZGUgPG1hcD5cbiNpbmNsdWRlIDxzc3RyZWFtPlxuI2luY2x1ZGUgPHN0cmluZz5cbiNpbmNsdWRlIDx1bm9yZGVyZWRfbWFwPlxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OnN0cmluZyB0ZXh0ID0gXCJ0aGUgY2F0IGFuZCB0aGUgZG9nIGFuZCB0aGUgYmlyZFwiO1xuICAgIHN0ZDo6dW5vcmRlcmVkX21hcDxzdGQ6OnN0cmluZywgaW50PiBjb3VudHM7ICAgICAgLy8gYSBoYXNoIG1hcDogUHl0aG9uIGRpY3RcbiAgICBzdGQ6OmlzdHJpbmdzdHJlYW0gaW4odGV4dCk7XG4gICAgZm9yIChzdGQ6OnN0cmluZyB3OyBpbiA%2BPiB3OykgKytjb3VudHNbd107ICAgICAgICAvLyBbXSBjcmVhdGVzIHRoZSBlbnRyeSAod2l0aCAwKSBpZiBtaXNzaW5nXG4gICAgc3RkOjpjb3V0IDw8IFwidGhlOiBcIiA8PCBjb3VudHNbXCJ0aGVcIl0gPDwgXCIsIGFuZDogXCIgPDwgY291bnRzW1wiYW5kXCJdIDw8ICdcXG4nO1xuXG4gICAgc3RkOjptYXA8c3RkOjpzdHJpbmcsIGludD4gc29ydGVkKGNvdW50cy5iZWdpbigpLCBjb3VudHMuZW5kKCkpOyAgIC8vIGEgdHJlZSBtYXA6IGtleXMgY29tZSBvdXQgc29ydGVkXG4gICAgZm9yIChjb25zdCBhdXRvJiBbd29yZCwgbl0gOiBzb3J0ZWQpIHN0ZDo6Y291dCA8PCB3b3JkIDw8ICc9JyA8PCBuIDw8ICcgJztcbiAgICBzdGQ6OmNvdXQgPDwgJ1xcbic7XG5cbiAgICBpZiAoYXV0byBpdCA9IHNvcnRlZC5maW5kKFwiY2F0XCIpOyBpdCAhPSBzb3J0ZWQuZW5kKCkpIHN0ZDo6Y291dCA8PCBcImZvdW5kIGNhdDogXCIgPDwgaXQtPnNlY29uZCA8PCAnXFxuJztcbiAgICBzdGQ6OmNvdXQgPDwgc3RkOjpib29sYWxwaGEgPDwgc29ydGVkLmNvbnRhaW5zKFwiZmlzaFwiKSA8PCAnXFxuJzsgICAvLyBDKysyMFxufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>the: 3, and: 2
+and=2 bird=1 cat=1 dog=1 the=3 
+found cat: 1
+false</pre></div></div>
+<div class="box warn">
+<p class="box-h">Watch out: `[]` on a map inserts</p>
+<p><code>counts["fish"]</code> <em>creates</em> a <code>"fish"</code> entry with value 0 if it doesn't exist. To look something up without changing the map, use <code>find</code>, <code>contains</code> or <code>at</code>. <code>at</code> throws if the key is missing, like Python's <code>d["x"]</code> raising <code>KeyError</code>.</p>
+</div>
+<p><code>std::map</code> keeps keys sorted, so you can ask for “the first key ≥ 100” with <code>lower_bound</code>. That is exactly what an order book needs (chapter 33). <code>std::unordered_map</code> is faster for plain lookups but has no order.</p>
+<h2 id="iterators-the-glue-between-containers-and-algorithms">Iterators: the glue between containers and algorithms</h2>
+<p>An <strong>iterator</strong> is a generalised pointer into a container. <code>c.begin()</code> points to the first element and <code>c.end()</code> points <strong>one past the last</strong>, so a range is <code>[begin, end)</code>. Algorithms work on iterator ranges, which is why one <code>std::sort</code> works for vectors, arrays and deques alike.</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">};</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">it</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">' '</span><span class="p">;</span><span class="w">   </span><span class="c1">// what range-for does for you</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"distance end - begin = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuI2luY2x1ZGUgPHZlY3Rvcj5cblxuaW50IG1haW4oKSB7XG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2ezEwLCAyMCwgMzB9O1xuICAgIGZvciAoYXV0byBpdCA9IHYuYmVnaW4oKTsgaXQgIT0gdi5lbmQoKTsgKytpdCkgc3RkOjpjb3V0IDw8ICppdCA8PCAnICc7ICAgLy8gd2hhdCByYW5nZS1mb3IgZG9lcyBmb3IgeW91XG4gICAgc3RkOjpjb3V0IDw8ICdcXG4nIDw8IFwiZGlzdGFuY2UgZW5kIC0gYmVnaW4gPSBcIiA8PCAodi5lbmQoKSAtIHYuYmVnaW4oKSkgPDwgJ1xcbic7XG59XG4iLCAiY29tcGlsZXJzIjogW3siaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQifV0sICJleGVjdXRvcnMiOiBbeyJjb21waWxlciI6IHsiaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQifSwgImFyZ3VtZW50cyI6ICIiLCAic3RkaW4iOiAiIn1dfV19" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>10 20 30 
+distance end - begin = 3</pre></div></div>
+<h2 id="algorithms">Algorithms</h2>
+<p>The <code>&lt;algorithm&gt;</code> and <code>&lt;numeric&gt;</code> headers hold ready-made, heavily optimised loops. Using them makes code shorter and clearer. C++20 added <strong>ranges</strong> versions (<code>std::ranges::sort(v)</code>) that take the whole container:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;numeric&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Trade</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">symbol</span><span class="p">;</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">price</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">qty</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Trade</span><span class="o">&gt;</span><span class="w"> </span><span class="n">trades</span><span class="p">{{</span><span class="s">"AAPL"</span><span class="p">,</span><span class="w"> </span><span class="mf">189.5</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">"MSFT"</span><span class="p">,</span><span class="w"> </span><span class="mf">410.2</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">"AAPL"</span><span class="p">,</span><span class="w"> </span><span class="mf">190.1</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s">"NVDA"</span><span class="p">,</span><span class="w"> </span><span class="mf">120.7</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">}};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Trade</span><span class="o">::</span><span class="n">price</span><span class="p">);</span><span class="w">                        </span><span class="c1">// sort by price (a "projection")</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">trades</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">symbol</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'@'</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">' '</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">count_if</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">Trade</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">notional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">trades</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">trades</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">                                      </span><span class="p">[](</span><span class="kt">double</span><span class="w"> </span><span class="n">acc</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Trade</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">qty</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">most</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">max_element</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Trade</span><span class="o">::</span><span class="n">qty</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" big trades, notional "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">notional</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", largest qty "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">most</span><span class="o">-&gt;</span><span class="n">symbol</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">erase_if</span><span class="p">(</span><span class="n">trades</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">Trade</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">symbol</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"AAPL"</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w">    </span><span class="c1">// remove matching elements (C++20)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">trades</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" left</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">iota</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">                                        </span><span class="c1">// 1..10</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">squares</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">squares</span><span class="p">),</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// Python: [x*x for x in v]</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"binary search for 49: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">binary_search</span><span class="p">(</span><span class="n">squares</span><span class="p">,</span><span class="w"> </span><span class="mi">49</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGFsZ29yaXRobT5cbiNpbmNsdWRlIDxpb3N0cmVhbT5cbiNpbmNsdWRlIDxudW1lcmljPlxuI2luY2x1ZGUgPHN0cmluZz5cbiNpbmNsdWRlIDx2ZWN0b3I%2BXG5cbnN0cnVjdCBUcmFkZSB7IHN0ZDo6c3RyaW5nIHN5bWJvbDsgZG91YmxlIHByaWNlOyBpbnQgcXR5OyB9O1xuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OnZlY3RvcjxUcmFkZT4gdHJhZGVze3tcIkFBUExcIiwgMTg5LjUsIDEwMH0sIHtcIk1TRlRcIiwgNDEwLjIsIDUwfSwge1wiQUFQTFwiLCAxOTAuMSwgMjAwfSwge1wiTlZEQVwiLCAxMjAuNywgMzAwfX07XG5cbiAgICBzdGQ6OnJhbmdlczo6c29ydCh0cmFkZXMsIHt9LCAmVHJhZGU6OnByaWNlKTsgICAgICAgICAgICAgICAgICAgICAgICAvLyBzb3J0IGJ5IHByaWNlIChhIFwicHJvamVjdGlvblwiKVxuICAgIGZvciAoY29uc3QgYXV0byYgdCA6IHRyYWRlcykgc3RkOjpjb3V0IDw8IHQuc3ltYm9sIDw8ICdAJyA8PCB0LnByaWNlIDw8ICcgJztcbiAgICBzdGQ6OmNvdXQgPDwgJ1xcbic7XG5cbiAgICBhdXRvIGJpZyA9IHN0ZDo6cmFuZ2VzOjpjb3VudF9pZih0cmFkZXMsIFtdKGNvbnN0IFRyYWRlJiB0KSB7IHJldHVybiB0LnF0eSA%2BPSAyMDA7IH0pO1xuICAgIGRvdWJsZSBub3Rpb25hbCA9IHN0ZDo6YWNjdW11bGF0ZSh0cmFkZXMuYmVnaW4oKSwgdHJhZGVzLmVuZCgpLCAwLjAsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFtdKGRvdWJsZSBhY2MsIGNvbnN0IFRyYWRlJiB0KSB7IHJldHVybiBhY2MgKyB0LnByaWNlICogdC5xdHk7IH0pO1xuICAgIGF1dG8gbW9zdCA9IHN0ZDo6cmFuZ2VzOjptYXhfZWxlbWVudCh0cmFkZXMsIHt9LCAmVHJhZGU6OnF0eSk7XG4gICAgc3RkOjpjb3V0IDw8IGJpZyA8PCBcIiBiaWcgdHJhZGVzLCBub3Rpb25hbCBcIiA8PCBub3Rpb25hbCA8PCBcIiwgbGFyZ2VzdCBxdHkgXCIgPDwgbW9zdC0%2Bc3ltYm9sIDw8ICdcXG4nO1xuXG4gICAgc3RkOjplcmFzZV9pZih0cmFkZXMsIFtdKGNvbnN0IFRyYWRlJiB0KSB7IHJldHVybiB0LnN5bWJvbCA9PSBcIkFBUExcIjsgfSk7ICAgIC8vIHJlbW92ZSBtYXRjaGluZyBlbGVtZW50cyAoQysrMjApXG4gICAgc3RkOjpjb3V0IDw8IHRyYWRlcy5zaXplKCkgPDwgXCIgbGVmdFxcblwiO1xuXG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2KDEwKTtcbiAgICBzdGQ6OmlvdGEodi5iZWdpbigpLCB2LmVuZCgpLCAxKTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLy8gMS4uMTBcbiAgICBzdGQ6OnZlY3RvcjxpbnQ%2BIHNxdWFyZXM7XG4gICAgc3RkOjpyYW5nZXM6OnRyYW5zZm9ybSh2LCBzdGQ6OmJhY2tfaW5zZXJ0ZXIoc3F1YXJlcyksIFtdKGludCB4KSB7IHJldHVybiB4ICogeDsgfSk7ICAgLy8gUHl0aG9uOiBbeCp4IGZvciB4IGluIHZdXG4gICAgc3RkOjpjb3V0IDw8IFwiYmluYXJ5IHNlYXJjaCBmb3IgNDk6IFwiIDw8IHN0ZDo6Ym9vbGFscGhhIDw8IHN0ZDo6cmFuZ2VzOjpiaW5hcnlfc2VhcmNoKHNxdWFyZXMsIDQ5KSA8PCAnXFxuJztcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>NVDA@120.7 AAPL@189.5 AAPL@190.1 MSFT@410.2 
+2 big trades, notional 113690, largest qty NVDA
+2 left
+binary search for 49: true</pre></div></div>
+<p>The most useful algorithms: <code>sort</code>, <code>stable_sort</code>, <code>find</code>, <code>find_if</code>, <code>count_if</code>, <code>any_of</code>/<code>all_of</code>/<code>none_of</code>, <code>transform</code>, <code>accumulate</code>/<code>reduce</code>, <code>min_element</code>/<code>max_element</code>, <code>binary_search</code>, <code>lower_bound</code>, <code>unique</code>, <code>reverse</code>, <code>rotate</code>, <code>partition</code>, <code>nth_element</code> (an O(n) median), <code>copy</code>, <code>fill</code> and <code>iota</code>.</p>
+<h2 id="lambdas-in-depth-captures">Lambdas in depth: captures</h2>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">over</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">limit</span><span class="p">](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">limit</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">       </span><span class="c1">// capture limit by value (a copy)</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="n">hits</span><span class="p">](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">++</span><span class="n">hits</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">     </span><span class="c1">// capture hits by reference</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ranges</span><span class="o">::</span><span class="n">count_if</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">over</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" over "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hits</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" odd</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">make_adder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">n</span><span class="p">](</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">};</span><span class="w">   </span><span class="c1">// a lambda returning a lambda</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">add10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w">          </span><span class="c1">// std::function can hold any callable</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">add10</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">tick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">counter</span><span class="p">]()</span><span class="w"> </span><span class="k">mutable</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">   </span><span class="c1">// mutable: may modify its own copy</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" (outer counter is still "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">")</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGFsZ29yaXRobT5cbiNpbmNsdWRlIDxmdW5jdGlvbmFsPlxuI2luY2x1ZGUgPGlvc3RyZWFtPlxuI2luY2x1ZGUgPHZlY3Rvcj5cblxuaW50IG1haW4oKSB7XG4gICAgaW50IGxpbWl0ID0gNSwgaGl0cyA9IDA7XG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2ezEsIDcsIDMsIDksIDV9O1xuXG4gICAgYXV0byBvdmVyID0gW2xpbWl0XShpbnQgeCkgeyByZXR1cm4geCA%2BIGxpbWl0OyB9OyAgICAgICAvLyBjYXB0dXJlIGxpbWl0IGJ5IHZhbHVlIChhIGNvcHkpXG4gICAgYXV0byBjb3VudCA9IFsmaGl0c10oaW50IHgpIHsgaWYgKHggJSAyKSArK2hpdHM7IH07ICAgICAvLyBjYXB0dXJlIGhpdHMgYnkgcmVmZXJlbmNlXG4gICAgc3RkOjpyYW5nZXM6OmZvcl9lYWNoKHYsIGNvdW50KTtcbiAgICBzdGQ6OmNvdXQgPDwgc3RkOjpyYW5nZXM6OmNvdW50X2lmKHYsIG92ZXIpIDw8IFwiIG92ZXIgXCIgPDwgbGltaXQgPDwgXCIsIFwiIDw8IGhpdHMgPDwgXCIgb2RkXFxuXCI7XG5cbiAgICBhdXRvIG1ha2VfYWRkZXIgPSBbXShpbnQgbikgeyByZXR1cm4gW25dKGludCB4KSB7IHJldHVybiB4ICsgbjsgfTsgfTsgICAvLyBhIGxhbWJkYSByZXR1cm5pbmcgYSBsYW1iZGFcbiAgICBzdGQ6OmZ1bmN0aW9uPGludChpbnQpPiBhZGQxMCA9IG1ha2VfYWRkZXIoMTApOyAgICAgICAgICAvLyBzdGQ6OmZ1bmN0aW9uIGNhbiBob2xkIGFueSBjYWxsYWJsZVxuICAgIHN0ZDo6Y291dCA8PCBhZGQxMCg1KSA8PCAnXFxuJztcblxuICAgIGludCBjb3VudGVyID0gMDtcbiAgICBhdXRvIHRpY2sgPSBbY291bnRlcl0oKSBtdXRhYmxlIHsgcmV0dXJuICsrY291bnRlcjsgfTsgICAvLyBtdXRhYmxlOiBtYXkgbW9kaWZ5IGl0cyBvd24gY29weVxuICAgIHN0ZDo6Y291dCA8PCB0aWNrKCkgPDwgdGljaygpIDw8IHRpY2soKSA8PCBcIiAob3V0ZXIgY291bnRlciBpcyBzdGlsbCBcIiA8PCBjb3VudGVyIDw8IFwiKVxcblwiO1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>2 over 5, 5 odd
+15
+123 (outer counter is still 0)</pre></div></div>
+<table>
+<thead>
+<tr>
+<th>Capture</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[x]</code></td>
+<td>copy x into the lambda</td>
+</tr>
+<tr>
+<td><code>[&amp;x]</code></td>
+<td>refer to the outside x (it must outlive the lambda!)</td>
+</tr>
+<tr>
+<td><code>[=]</code> / <code>[&amp;]</code></td>
+<td>capture everything used, by copy / by reference</td>
+</tr>
+<tr>
+<td><code>[this]</code></td>
+<td>access the current object's members</td>
+</tr>
+<tr>
+<td><code>[p = std::move(ptr)]</code></td>
+<td>move something into the lambda</td>
+</tr>
+</tbody>
+</table>
+<p><code>std::function</code> can hold any callable with a matching signature. It is convenient for callbacks, but it may allocate and adds an indirect call. Use templates or <code>auto</code> when the extra speed matters.</p>
+<h2 id="choosing-a-container-the-practical-rules">Choosing a container: the practical rules</h2>
+<ol>
+<li><strong>Start with <code>std::vector</code>.</strong> Even for searching: a linear scan through 100 contiguous elements beats a tree.</li>
+<li>Need lookup by key: <strong><code>std::unordered_map</code></strong>. Need sorted keys or range queries: <strong><code>std::map</code></strong>.</li>
+<li>A queue or stack: <code>std::deque</code>, or <code>std::vector</code> with <code>push_back</code>/<code>pop_back</code>.</li>
+<li>Avoid <code>std::list</code> unless you have measured a reason.</li>
+<li>In performance-critical code, reserve capacity, avoid maps of strings in hot loops, and consider flat structures such as a sorted vector (<code>std::flat_map</code> arrives in C++23 library implementations).</li>
+</ol>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;list&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;numeric&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">C</span><span class="o">&gt;</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">time_sum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">C</span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="mf">0L</span><span class="n">L</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">""</span><span class="p">;</span><span class="w">                    </span><span class="c1">// use the result</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5'000'000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">l</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">tv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time_sum</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="w"> </span><span class="n">tl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time_sum</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"vector: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tv</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" ms, list: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tl</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" ms ("</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tl</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">tv</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"x slower)</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGNocm9ubz5cbiNpbmNsdWRlIDxpb3N0cmVhbT5cbiNpbmNsdWRlIDxsaXN0PlxuI2luY2x1ZGUgPG51bWVyaWM%2BXG4jaW5jbHVkZSA8dmVjdG9yPlxuXG50ZW1wbGF0ZSA8dHlwZW5hbWUgQz5cbmRvdWJsZSB0aW1lX3N1bShjb25zdCBDJiBjKSB7XG4gICAgYXV0byB0MCA9IHN0ZDo6Y2hyb25vOjpzdGVhZHlfY2xvY2s6Om5vdygpO1xuICAgIGxvbmcgbG9uZyBzID0gc3RkOjphY2N1bXVsYXRlKGMuYmVnaW4oKSwgYy5lbmQoKSwgMExMKTtcbiAgICBhdXRvIHQxID0gc3RkOjpjaHJvbm86OnN0ZWFkeV9jbG9jazo6bm93KCk7XG4gICAgaWYgKHMgPT0gNDIpIHN0ZDo6Y291dCA8PCBcIlwiOyAgICAgICAgICAgICAgICAgICAgLy8gdXNlIHRoZSByZXN1bHRcbiAgICByZXR1cm4gc3RkOjpjaHJvbm86OmR1cmF0aW9uPGRvdWJsZSwgc3RkOjptaWxsaT4odDEgLSB0MCkuY291bnQoKTtcbn1cblxuaW50IG1haW4oKSB7XG4gICAgY29uc3QgaW50IG4gPSA1JzAwMCcwMDA7XG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2KG4sIDEpO1xuICAgIHN0ZDo6bGlzdDxpbnQ%2BIGwodi5iZWdpbigpLCB2LmVuZCgpKTtcbiAgICBkb3VibGUgdHYgPSB0aW1lX3N1bSh2KSwgdGwgPSB0aW1lX3N1bShsKTtcbiAgICBzdGQ6OmNvdXQgPDwgXCJ2ZWN0b3I6IFwiIDw8IHR2IDw8IFwiIG1zLCBsaXN0OiBcIiA8PCB0bCA8PCBcIiBtcyAoXCIgPDwgc3RhdGljX2Nhc3Q8aW50Pih0bCAvIHR2KSA8PCBcInggc2xvd2VyKVxcblwiO1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>vector: 4.18696 ms, list: 21.8539 ms (5x slower)</pre></div></div>
+<p>Both are O(n), yet the list is far slower: its nodes are scattered across memory and every step is a pointer chase, which is chapter 26's story.</p>
+<div class="quiz"><div class="quiz-h">Check yourself</div><div class="q"><p class="qq">Which container should you reach for first?</p><ol><li><button type="button" class="qopt" data-ok="1">std::vector</button></li><li><button type="button" class="qopt" data-ok="0">std::list</button></li><li><button type="button" class="qopt" data-ok="0">std::map</button></li></ol><p class="why" hidden>Contiguous memory makes vector the fastest general-purpose container. </p></div><div class="q"><p class="qq">What does <code>counts["new"]</code> do on a std::map that has no "new" key?</p><ol><li><button type="button" class="qopt" data-ok="1">Inserts "new" with a default value (0) and returns a reference to it</button></li><li><button type="button" class="qopt" data-ok="0">Throws std::out_of_range</button></li><li><button type="button" class="qopt" data-ok="0">Returns nullptr</button></li></ol><p class="why" hidden>Use find(), contains() or at() to look without inserting. </p></div><div class="q"><p class="qq">A lambda captures <code>[&amp;total]</code> and is stored and called after total's function has returned. What is the problem?</p><ol><li><button type="button" class="qopt" data-ok="1">The reference dangles: total no longer exists</button></li><li><button type="button" class="qopt" data-ok="0">Nothing</button></li><li><button type="button" class="qopt" data-ok="0">The lambda copies total</button></li></ol><p class="why" hidden>Reference captures must not outlive the variable. </p></div></div>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="19-templates.html"><small>Previous</small>18 · Templates</a><a class="next" href="21-errors.html"><small>Next</small>20 · Errors: exceptions, optional, expected</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

@@ -117,6 +117,66 @@
     render();
   };
 
+  // Data race: step two threads through counter++ = load, add, store
+  W.race = function (w) {
+    const PROG = ["load counter into register", "add 1 to register", "store register into counter"];
+    let st;
+    const reset = () => { st = { counter: 0, t: [{ pc: 0, reg: null, done: 0 }, { pc: 0, reg: null, done: 0 }], log: [] }; render(); };
+    const step = (k) => {
+      const t = st.t[k];
+      if (t.pc === 0) t.reg = st.counter;
+      else if (t.pc === 1) t.reg += 1;
+      else { st.counter = t.reg; t.done++; }
+      st.log.push(`${k ? "B" : "A"}: ${PROG[t.pc]}${t.pc === 0 ? ` (reads ${t.reg})` : t.pc === 2 ? ` (writes ${st.counter})` : ` (now ${t.reg})`}`);
+      t.pc = (t.pc + 1) % 3; render();
+    };
+    const box = h("div");
+    const render = () => {
+      const col = (k) => h("div", { class: "region" }, h("div", { class: "region-h" }, `Thread ${k ? "B" : "A"}: counter++  (done ${st.t[k].done}×)`),
+        PROG.map((p, i) => h("div", { class: "cell" + (st.t[k].pc === i ? " hi" : "") }, h("span", { class: "nm" }, (st.t[k].pc === i ? "▶ " : "  ") + p), h("span"), h("span"))),
+        h("div", { class: "cell" }, h("span", { class: "nm" }, "register"), h("span"), h("span", { class: "vl" }, st.t[k].reg ?? "–")),
+        h("button", { class: "wbtn pri", type: "button", onclick: () => step(k), style: "margin-top:8px" }, `Step thread ${k ? "B" : "A"}`));
+      const expected = st.t[0].done + st.t[1].done;
+      box.replaceChildren(h("div", { class: "mem" }, col(0), col(1)),
+        h("div", { class: "mem-note" }, h("b", null, `Shared counter = ${st.counter}`), `  ·  increments completed = ${expected}`,
+          expected && st.counter !== expected ? h("b", { style: "color:var(--red)" }, `  ·  an update was LOST: ${expected - st.counter} increment(s) vanished`) : ""),
+        h("div", { class: "mem-out" }, st.log.slice(-8).join("\n") || "Try: A load, B load, A add, B add, A store, B store."));
+    };
+    w.append(h("div", { class: "widget-h" }, w.dataset.title || "A data race, step by step"), h("div", { class: "wctl" }, h("button", { class: "wbtn", type: "button", onclick: () => reset() }, "Reset")), box);
+    reset();
+  };
+
+  // Cache simulator: walk a 2D array row by row or column by column
+  W.cache = function (w) {
+    const R = 8, C = 8, LINE = 4, WAYS = 4;            // 4 elements per cache line, a tiny cache of 4 lines
+    let order = "row", i = 0, hits = 0, misses = 0, cache = [], timer = null;
+    const grid = h("div", { style: `display:grid;grid-template-columns:repeat(${C},1fr);gap:3px;max-width:360px` });
+    const cells = [];
+    for (let k = 0; k < R * C; k++) { const c = h("div", { class: "bit", style: "width:auto;height:30px;font-size:11px" }, k); cells.push(c); grid.append(c); }
+    const stats = h("div", { class: "mem-note" }), cachev = h("div", { class: "mem-out" });
+    const idx = (n) => (order === "row" ? n : (n % R) * C + Math.floor(n / R));
+    const paint = () => {
+      cells.forEach((c, k) => { const line = Math.floor(k / LINE); c.style.background = cache.includes(line) ? "var(--blue-soft)" : ""; c.style.outline = ""; });
+      if (i > 0) { const k = idx(i - 1); cells[k].style.outline = "2px solid var(--accent)"; }
+      stats.innerHTML = `Visited ${i} of ${R * C} elements · <b style="color:var(--green)">${hits} cache hits</b> · <b style="color:var(--red)">${misses} misses</b> (each miss = a slow trip to main memory)`;
+      cachev.textContent = "cache lines held: " + (cache.map((l) => `[${l * LINE}–${l * LINE + LINE - 1}]`).join(" ") || "none");
+    };
+    const step = () => {
+      if (i >= R * C) { stop(); return; }
+      const line = Math.floor(idx(i) / LINE);
+      if (cache.includes(line)) { hits++; cache = cache.filter((x) => x !== line).concat(line); }
+      else { misses++; cache.push(line); if (cache.length > WAYS) cache.shift(); }
+      i++; paint();
+    };
+    const stop = () => { clearInterval(timer); timer = null; };
+    const start = (o) => { stop(); order = o; i = 0; hits = 0; misses = 0; cache = []; paint(); timer = setInterval(step, 90); };
+    w.append(h("div", { class: "widget-h" }, w.dataset.title || "Cache simulator"),
+      h("div", { class: "wctl" }, h("button", { class: "wbtn pri", type: "button", onclick: () => start("row") }, "Walk row by row"),
+        h("button", { class: "wbtn", type: "button", onclick: () => start("col") }, "Walk column by column")),
+      h("div", { class: "mem" }, grid, h("div", null, h("p", { class: "dim" }, `An 8×8 array stored row by row. Memory moves into the cache in lines of ${LINE} elements, and this toy cache holds ${WAYS} lines (the least recently used is evicted). Blue = currently cached.`), stats, cachev)));
+    paint();
+  };
+
   window.GUC = { W, h, $, $$ };
   document.addEventListener("DOMContentLoaded", () => {});
   $$("[data-widget]").forEach((w) => { const f = W[w.dataset.widget]; if (f) { w.classList.add("widget"); try { f(w); } catch (e) { console.error(e); w.append(h("p", null, "This interactive part failed to load.")); } } });

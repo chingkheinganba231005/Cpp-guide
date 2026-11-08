@@ -43,7 +43,7 @@
       {"id": "29-game-engine", "n": "28", "title": "Project: a game engine core", "summary": "Game loop, fixed timestep, an entity-component system, physics."},
       {"id": "30-renderer", "n": "29", "title": "Project: a software renderer", "summary": "Draw triangles yourself: rasterisation, depth buffer, shading, images."},
       {"id": "31-ml-library", "n": "30", "title": "Project: your own ML library", "summary": "Tensors, automatic differentiation, a neural network trained from scratch."},
-      {"id": "32-fast-matmul", "n": "31", "title": "Project: fast matrix multiplication", "summary": "From naive to cache-blocked, SIMD and multithreaded: 100× faster."},
+      {"id": "32-fast-matmul", "n": "31", "title": "Project: fast matrix multiplication", "summary": "From naive to cache-blocked, vectorised and multithreaded: 30× faster, measured."},
       {"id": "33-gpu", "n": "32", "title": "GPU programming and your own kernels", "summary": "CUDA's model: threads, blocks, shared memory; matmul and reduction kernels."}
     ]},
     {"n": "VI", "title": "Low latency and systems", "blurb": "The techniques behind trading engines, servers and operating-system-level code.", "chapters": [

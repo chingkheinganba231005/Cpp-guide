@@ -95,6 +95,17 @@ def compile_and_run(code, opts, files, chap_id, idx):
                 rp = subprocess.run((["./prog"] if "-fsanitize" in " ".join(flags) else ["stdbuf", "-oL", "-eL", "./prog"]), cwd=d, input=stdin, capture_output=True, text=True, timeout=int(opts.get("timeout", 60)),
                                     env=dict(os.environ, ASAN_OPTIONS="detect_leaks=1:abort_on_error=0", UBSAN_OPTIONS="print_stacktrace=0"))
                 res.update(stdout=rp.stdout, stderr=rp.stderr.replace(d + "/", ""), rc=rp.returncode)
+                imgs = []
+                for name in [x for x in opts.get("image", "").split(",") if x]:
+                    from PIL import Image
+                    src = os.path.join(d, name)
+                    if not os.path.exists(src):
+                        raise SystemExit(f"[{chap_id} #{idx}] expected the program to write {name}")
+                    out_name = f"{chap_id}-{os.path.splitext(name)[0]}.png"
+                    os.makedirs(os.path.join(OUT, "img"), exist_ok=True)
+                    Image.open(src).save(os.path.join(OUT, "img", out_name))
+                    imgs.append(out_name)
+                res["images"] = imgs
             except subprocess.TimeoutExpired:
                 raise SystemExit(f"[{chap_id} #{idx}] timed out")
             if rp.returncode != 0 and expect != "crash":
@@ -152,6 +163,8 @@ def render_code(lang, opts, code, files, chap, idx):
         if opts.get("predict"):
             inner = f'<button class="reveal" type="button">Predict the output first, then click to check</button><div class="hid" hidden>{inner}</div>'
         out.append(f'<div class="{cls}">{inner}</div>')
+        for im in res.get("images", []):
+            out.append(f'<div class="out img"><div class="out-h">Image written by the program</div><img src="img/{im}" alt="Image rendered by this example" loading="lazy"></div>')
     return (f'<div class="code run">{head}<pre class="src"><code>{hl(code, "cpp")}</code></pre>'
             f'<div class="code-bar"><span class="cmd">$ {html.escape(cmd)}</span>{links}</div>{"".join(out)}</div>')
 

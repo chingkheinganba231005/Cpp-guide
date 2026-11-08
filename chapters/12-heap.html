@@ -156,7 +156,7 @@ Shadow bytes around the buggy address:
 <span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">img</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The fix is not “be more careful”. The fix is to give the memory an <strong>owner object</strong> whose destructor frees it automatically, whatever path the code takes. This idea is called <strong>RAII</strong>, and it is the most important idea in C++ (chapters 13 and 15). You have already been using it: <code>std::vector</code> and <code>std::string</code> allocate on the heap and free automatically when they go out of scope.</p>
+<p>The fix is not “be more careful”. The fix is to give the memory an <strong>owner object</strong> whose destructor frees it automatically, whatever path the code takes. This idea is called <strong>RAII</strong>, and it is the most important idea in C++ (chapters 12 and 15). You have already been using it: <code>std::vector</code> and <code>std::string</code> allocate on the heap and free automatically when they go out of scope.</p>
 <div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 

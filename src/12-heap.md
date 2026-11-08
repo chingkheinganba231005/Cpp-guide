@@ -88,7 +88,7 @@ void process() {
 }
 ```
 
-The fix is not “be more careful”. The fix is to give the memory an **owner object** whose destructor frees it automatically, whatever path the code takes. This idea is called **RAII**, and it is the most important idea in C++ (chapters 13 and 15). You have already been using it: `std::vector` and `std::string` allocate on the heap and free automatically when they go out of scope.
+The fix is not “be more careful”. The fix is to give the memory an **owner object** whose destructor frees it automatically, whatever path the code takes. This idea is called **RAII**, and it is the most important idea in C++ (chapters 12 and 15). You have already been using it: `std::vector` and `std::string` allocate on the heap and free automatically when they go out of scope.
 
 ```cpp run
 #include <iostream>

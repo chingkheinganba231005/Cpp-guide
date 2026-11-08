@@ -110,7 +110,7 @@ int main() {
 }
 ```
 
-Two versions of `operator()`: a non-const one that returns a reference (so you can assign through it) and a const one for reading. C++23 also allows `m[r, c]` with a multi-argument `operator[]`. Chapter 31 makes this exact multiplication loop about 100× faster.
+Two versions of `operator()`: a non-const one that returns a reference (so you can assign through it) and a const one for reading. C++23 also allows `m[r, c]` with a multi-argument `operator[]`. Chapter 31 makes this exact multiplication loop about 30× faster.
 
 ## A class you can call: function objects
 

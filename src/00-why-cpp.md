@@ -45,7 +45,7 @@ C++ lets you control things Python decides for you:
 |---|---|
 | **Where data lives in memory** and how it is laid out | Modern CPUs are fast only when data arrives in the right order (chapter 26). Game engines and ML libraries are designed around this. |
 | **When memory is allocated and freed** | No garbage collector pausing your program, which is essential for games (60 frames per second) and trading (microseconds). |
-| **Exactly which CPU instructions are used** (SIMD, atomics) | Matrix multiplication can get 100× faster (chapter 31), and threads can share data without locks (chapter 34). |
+| **Exactly which CPU instructions are used** (SIMD, atomics) | The same matrix multiplication can run 30× faster or more (chapter 31), and threads can share data without locks (chapter 34). |
 | **Talking to hardware and the OS directly** | GPU kernels, drivers, network stacks, operating systems. |
 
 The price is responsibility. C++ trusts you, and some mistakes, such as reading memory you no longer own, are not caught automatically. Part II teaches you to avoid them, and the tools that find them.

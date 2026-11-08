@@ -92,7 +92,7 @@ def compile_and_run(code, opts, files, chap_id, idx):
             if expect == "fail":
                 raise SystemExit(f"[{chap_id} #{idx}] expected a compile error but it compiled:\n{code}")
             try:
-                rp = subprocess.run(["stdbuf", "-oL", "-eL", "./prog"], cwd=d, input=stdin, capture_output=True, text=True, timeout=int(opts.get("timeout", 60)),
+                rp = subprocess.run((["./prog"] if "-fsanitize" in " ".join(flags) else ["stdbuf", "-oL", "-eL", "./prog"]), cwd=d, input=stdin, capture_output=True, text=True, timeout=int(opts.get("timeout", 60)),
                                     env=dict(os.environ, ASAN_OPTIONS="detect_leaks=1:abort_on_error=0", UBSAN_OPTIONS="print_stacktrace=0"))
                 res.update(stdout=rp.stdout, stderr=rp.stderr.replace(d + "/", ""), rc=rp.returncode)
             except subprocess.TimeoutExpired:

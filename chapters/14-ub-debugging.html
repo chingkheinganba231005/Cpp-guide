@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>13 · Undefined behaviour, sanitizers, debuggers — Ground Up C++</title>
+<meta name="description" content="Why C++ bugs are strange, and the tools that catch them.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="14-ub-debugging">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">II · Memory and the machine</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html"><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details><summary>I · The basics</summary><ol><li><a href="02-hello.html"><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details open><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html" class=cur><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html"><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html"><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html"><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">II · Memory and the machine</div>
+        <h1><span class="n">13</span> Undefined behaviour, sanitizers, debuggers</h1>
+        <p class="sum">Why C++ bugs are strange, and the tools that catch them.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#what-undefined-behaviour-means">What “undefined behaviour” means</a></li><li class="l2"><a href="#ub-that-changes-under-optimisation">UB that changes under optimisation</a></li><li class="l2"><a href="#addresssanitizer-your-best-friend">AddressSanitizer: your best friend</a></li><li class="l2"><a href="#other-tools-in-the-same-family">Other tools in the same family</a></li><li class="l2"><a href="#warnings-are-free-bug-reports">Warnings are free bug reports</a></li><li class="l2"><a href="#using-a-debugger">Using a debugger</a></li><li class="l2"><a href="#debugging-habits-that-work">Debugging habits that work</a></li></ol></nav>
+      <p>In Python, mistakes raise exceptions with a clear message. Many C++ mistakes do something stranger: they cause <strong>undefined behaviour</strong> (UB). This chapter explains what that means, why C++ has it, and the tools that make these bugs findable. <strong>AddressSanitizer, UndefinedBehaviorSanitizer and a debugger</strong> will save you weeks.</p>
+<h2 id="what-undefined-behaviour-means">What “undefined behaviour” means</h2>
+<p>The C++ standard lists certain operations whose result is simply <em>not defined</em>: reading outside an array, using freed memory, signed integer overflow, dereferencing null, reading an uninitialised variable, data races between threads, and more. If your program does one of these, <strong>the standard places no requirements at all</strong> on what happens. It might:</p>
+<ul>
+<li>appear to work (the worst outcome, because it hides the bug),</li>
+<li>crash immediately, or much later somewhere unrelated,</li>
+<li>give wrong answers only when optimisation is on, or only on another compiler,</li>
+<li>be exploited by an attacker.</li>
+</ul>
+<p>Why would a language allow this? Because checking every array access, every addition and every pointer would slow every program down. C++ makes <strong>you</strong> responsible, and in return the optimiser can assume UB never happens, which lets it generate much faster code.</p>
+<div class="box eli5">
+<p class="box-h">In plain words</p>
+<p>UB is like a contract that says “you will never drive on the left”. Because of that promise, the road builders didn't put up barriers. If you break the promise, nobody can say what will happen. Maybe nothing, maybe a crash a mile later.</p>
+</div>
+<h2 id="ub-that-changes-under-optimisation">UB that changes under optimisation</h2>
+<p>Here the compiler assumes signed integers never overflow, so it decides that <code>i + 1 &gt; i</code> is always true:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;climits&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">next_is_bigger</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">     </span><span class="c1">// overflow is UB, so the compiler assumes it can't happen</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">next_is_bigger</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">' '</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">next_is_bigger</span><span class="p">(</span><span class="n">INT_MAX</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGNsaW1pdHM%2BXG4jaW5jbHVkZSA8aW9zdHJlYW0%2BXG5cbmJvb2wgbmV4dF9pc19iaWdnZXIoaW50IGkpIHsgcmV0dXJuIGkgKyAxID4gaTsgfSAgICAgLy8gb3ZlcmZsb3cgaXMgVUIsIHNvIHRoZSBjb21waWxlciBhc3N1bWVzIGl0IGNhbid0IGhhcHBlblxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OmNvdXQgPDwgc3RkOjpib29sYWxwaGEgPDwgbmV4dF9pc19iaWdnZXIoNSkgPDwgJyAnIDw8IG5leHRfaXNfYmlnZ2VyKElOVF9NQVgpIDw8ICdcXG4nO1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>true true</pre></div></div>
+<p>Mathematically <code>INT_MAX + 1</code> would wrap to a negative number, so you might expect <code>false</code>. With <code>-O2</code> GCC simply returns <code>true</code>. The program “works”, but it isn't doing the arithmetic you think it is. <strong>UndefinedBehaviorSanitizer</strong> catches the actual overflow:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;climits&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INT_MAX</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">big</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">one</span><span class="p">;</span><span class="w">          </span><span class="c1">// signed overflow</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra -fsanitize=undefined -g -O0 main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGNsaW1pdHM%2BXG4jaW5jbHVkZSA8aW9zdHJlYW0%2BXG5cbmludCBtYWluKCkge1xuICAgIGludCBiaWcgPSBJTlRfTUFYO1xuICAgIGludCB2b2xhdGlsZSBvbmUgPSAxO1xuICAgIGludCByID0gYmlnICsgb25lOyAgICAgICAgICAvLyBzaWduZWQgb3ZlcmZsb3dcbiAgICBzdGQ6OmNvdXQgPDwgciA8PCAnXFxuJztcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCAtZnNhbml0aXplPXVuZGVmaW5lZCAtZyAtTzAifV0sICJleGVjdXRvcnMiOiBbeyJjb21waWxlciI6IHsiaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQgLWZzYW5pdGl6ZT11bmRlZmluZWQgLWcgLU8wIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>-2147483648
+<span class="stderr">main.cpp:7:19: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type &#x27;int&#x27;</span></pre></div></div>
+<h2 id="addresssanitizer-your-best-friend">AddressSanitizer: your best friend</h2>
+<p>Compile with <code>-fsanitize=address -g</code> (GCC and Clang; Visual Studio has <code>/fsanitize=address</code>). The program runs about 2× slower and reports memory errors precisely, with the line numbers of the bad access, the allocation and the free.</p>
+<p>A buffer overflow on the heap:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+<span class="w">    </span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">                   </span><span class="c1">// one past the end</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra -fsanitize=address -g -O0 main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPHZlY3Rvcj5cblxuaW50IG1haW4oKSB7XG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2KDQpO1xuICAgIGludCogcCA9IHYuZGF0YSgpO1xuICAgIHBbNF0gPSAxOyAgICAgICAgICAgICAgICAgICAvLyBvbmUgcGFzdCB0aGUgZW5kXG4gICAgcmV0dXJuIHBbMF07XG59XG4iLCAiY29tcGlsZXJzIjogW3siaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQgLWZzYW5pdGl6ZT1hZGRyZXNzIC1nIC1PMCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCAtZnNhbml0aXplPWFkZHJlc3MgLWcgLU8wIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre><span class="dim">(no output)</span>
+<span class="stderr">=================================================================
+==1867==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x502000000020 at pc 0x557f6d5684bc bp 0x7fff157f8920 sp 0x7fff157f8910
+WRITE of size 4 at 0x502000000020 thread T0
+    #0 0x557f6d5684bb in main main.cpp:6
+    #1 0x7ff82462a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #2 0x7ff82462a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #3 0x557f6d5682c4 in _start (prog+0x12c4) (BuildId: 23603238a78eaa0cf169a08bba8311072219891e)
+
+0x502000000020 is located 0 bytes after 16-byte region [0x502000000010,0x502000000020)
+allocated by thread T0 here:
+    #0 0x7ff824efe548 in operator new(unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:95
+    #1 0x557f6d56907d in std::__new_allocator&lt;int&gt;::allocate(unsigned long, void const*) /usr/include/c++/13/bits/new_allocator.h:151
+    #2 0x557f6d568e35 in std::allocator&lt;int&gt;::allocate(unsigned long) /usr/include/c++/13/bits/allocator.h:198
+    #3 0x557f6d568e35 in std::allocator_traits&lt;std::allocator&lt;int&gt; &gt;::allocate(std::allocator&lt;int&gt;&amp;, unsigned long) /usr/include/c++/13/bits/alloc_traits.h:482
+    #4 0x557f6d568e35 in std::_Vector_base&lt;int, std::allocator&lt;int&gt; &gt;::_M_allocate(unsigned long) /usr/include/c++/13/bits/stl_vector.h:381
+    #5 0x557f6d568bac in std::_Vector_base&lt;int, std::allocator&lt;int&gt; &gt;::_M_create_storage(unsigned long) /usr/include/c++/13/bits/stl_vector.h:398
+    #6 0x557f6d568a74 in std::_Vector_base&lt;int, std::allocator&lt;int&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;int&gt; const&amp;) /usr/include/c++/13/bits/stl_vector.h:335
+    #7 0x557f6d568640 in std::vector&lt;int, std::allocator&lt;int&gt; &gt;::vector(unsigned long, std::allocator&lt;int&gt; const&amp;) /usr/include/c++/13/bits/stl_vector.h:557
+    #8 0x557f6d568454 in main main.cpp:4
+    #9 0x7ff82462a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #10 0x7ff82462a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #11 0x557f6d5682c4 in _start (prog+0x12c4) (BuildId: 23603238a78eaa0cf169a08bba8311072219891e)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow main.cpp:6 in main
+Shadow bytes around the buggy address:
+  0x501ffffffd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x501ffffffe00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x501ffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x501fffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x501fffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+... (26 more lines)</span>
+<span class="dim">[exit code 1]</span></pre></div></div>
+<p>A dangling pointer into a vector that reallocated (the bug chapter 7 warned about):</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="w">    </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w">              </span><span class="c1">// a reference into the vector's heap block</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w">   </span><span class="c1">// the vector grows: its block moves</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span><span class="w">     </span><span class="c1">// first refers to the OLD, freed block</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra -fsanitize=address -g -O0 main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuI2luY2x1ZGUgPHZlY3Rvcj5cblxuaW50IG1haW4oKSB7XG4gICAgc3RkOjp2ZWN0b3I8aW50PiB2ezEsIDIsIDN9O1xuICAgIGludCYgZmlyc3QgPSB2WzBdOyAgICAgICAgICAgICAgLy8gYSByZWZlcmVuY2UgaW50byB0aGUgdmVjdG9yJ3MgaGVhcCBibG9ja1xuICAgIGZvciAoaW50IGkgPSAwOyBpIDwgMTAwOyArK2kpIHYucHVzaF9iYWNrKGkpOyAgIC8vIHRoZSB2ZWN0b3IgZ3Jvd3M6IGl0cyBibG9jayBtb3Zlc1xuICAgIHN0ZDo6Y291dCA8PCBmaXJzdCA8PCAnXFxuJzsgICAgIC8vIGZpcnN0IHJlZmVycyB0byB0aGUgT0xELCBmcmVlZCBibG9ja1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIC1mc2FuaXRpemU9YWRkcmVzcyAtZyAtTzAifV0sICJleGVjdXRvcnMiOiBbeyJjb21waWxlciI6IHsiaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQgLWZzYW5pdGl6ZT1hZGRyZXNzIC1nIC1PMCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre><span class="dim">(no output)</span>
+<span class="stderr">=================================================================
+==1873==ERROR: AddressSanitizer: heap-use-after-free on address 0x502000000010 at pc 0x55621a12b731 bp 0x7ffebb468510 sp 0x7ffebb468500
+READ of size 4 at 0x502000000010 thread T0
+    #0 0x55621a12b730 in main main.cpp:8
+    #1 0x7f9af4e2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #2 0x7f9af4e2a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #3 0x55621a12b344 in _start (prog+0x2344) (BuildId: c05b6c2af3743056164f95cedbe2b99c1b241d94)
+
+0x502000000010 is located 0 bytes inside of 12-byte region [0x502000000010,0x50200000001c)
+freed by thread T0 here:
+    #0 0x7f9af56ff5e8 in operator delete(void*, unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:164
+    #1 0x55621a12d8de in std::__new_allocator&lt;int&gt;::deallocate(int*, unsigned long) /usr/include/c++/13/bits/new_allocator.h:172
+    #2 0x55621a12c91c in std::allocator&lt;int&gt;::deallocate(int*, unsigned long) /usr/include/c++/13/bits/allocator.h:210
+    #3 0x55621a12c91c in std::allocator_traits&lt;std::allocator&lt;int&gt; &gt;::deallocate(std::allocator&lt;int&gt;&amp;, int*, unsigned long) /usr/include/c++/13/bits/alloc_traits.h:517
+    #4 0x55621a12c91c in std::_Vector_base&lt;int, std::allocator&lt;int&gt; &gt;::_M_deallocate(int*, unsigned long) /usr/include/c++/13/bits/stl_vector.h:390
+    #5 0x55621a12d357 in void std::vector&lt;int, std::allocator&lt;int&gt; &gt;::_M_realloc_insert&lt;int const&amp;&gt;(__gnu_cxx::__normal_iterator&lt;int*, std::vector&lt;int, std::allocator&lt;int&gt; &gt; &gt;, int const&amp;) /usr/include/c++/13/bits/vector.tcc:519
+    #6 0x55621a12c89c in std::vector&lt;int, std::allocator&lt;int&gt; &gt;::push_back(int const&amp;) /usr/include/c++/13/bits/stl_vector.h:1292
+    #7 0x55621a12b660 in main main.cpp:7
+    #8 0x7f9af4e2a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #9 0x7f9af4e2a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #10 0x55621a12b344 in _start (prog+0x2344) (BuildId: c05b6c2af3743056164f95cedbe2b99c1b241d94)
+
+previously allocated by thread T0 here:
+    #0 0x7f9af56fe548 in operator new(unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:95
+    #1 0x55621a12c6eb in std::__new_allocator&lt;int&gt;::allocate(unsigned long, void const*) /usr/include/c++/13/bits/new_allocator.h:151
+    #2 0x55621a12c4d9 in std::allocator&lt;int&gt;::allocate(unsigned long) /usr/include/c++/13/bits/allocator.h:198
+    #3 0x55621a12c4d9 in std::allocator_traits&lt;std::allocator&lt;int&gt; &gt;::allocate(std::allocator&lt;int&gt;&amp;, unsigned long) /usr/include/c++/13/bits/alloc_traits.h:482
+    #4 0x55621a12c4d9 in std::_Vector_base&lt;int, std::allocator&lt;int&gt; &gt;::_M_allocate(unsigned long) /usr/include/c++/13/bits/stl_vector.h:381
+    #5 0x55621a12bdc7 in void std::vector&lt;int, std::allocator&lt;int&gt; &gt;::_M_range_initialize&lt;int const*&gt;(int const*, int const*, std::forward_iterator_tag) /usr/include/c++/13/bits/stl_vector.h:1692
+    #6 0x55621a12b9da in std::vector&lt;int, std::allocator&lt;int&gt; &gt;::vector(std::initializer_list&lt;int&gt;, std::allocator&lt;int&gt; const&amp;) /usr/include/c++/13/bits/stl_vector.h:682
+... (38 more lines)</span>
+<span class="dim">[exit code 1]</span></pre></div></div>
+<p>A dangling <code>string_view</code> (chapter 6's warning):</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="nf">first_word</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">// s is a local copy...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">s</span><span class="p">).</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">' '</span><span class="p">));</span><span class="w">    </span><span class="c1">// ...and we return a view into it</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">first_word</span><span class="p">(</span><span class="s">"supercalifragilistic words longer than the small-string buffer"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra -fsanitize=address -g -O0 main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuI2luY2x1ZGUgPHN0cmluZz5cbiNpbmNsdWRlIDxzdHJpbmdfdmlldz5cblxuc3RkOjpzdHJpbmdfdmlldyBmaXJzdF93b3JkKHN0ZDo6c3RyaW5nIHMpIHsgICAvLyBzIGlzIGEgbG9jYWwgY29weS4uLlxuICAgIHJldHVybiBzdGQ6OnN0cmluZ192aWV3KHMpLnN1YnN0cigwLCBzLmZpbmQoJyAnKSk7ICAgIC8vIC4uLmFuZCB3ZSByZXR1cm4gYSB2aWV3IGludG8gaXRcbn1cblxuaW50IG1haW4oKSB7XG4gICAgc3RkOjpzdHJpbmdfdmlldyB3ID0gZmlyc3Rfd29yZChcInN1cGVyY2FsaWZyYWdpbGlzdGljIHdvcmRzIGxvbmdlciB0aGFuIHRoZSBzbWFsbC1zdHJpbmcgYnVmZmVyXCIpO1xuICAgIHN0ZDo6Y291dCA8PCB3IDw8ICdcXG4nO1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIC1mc2FuaXRpemU9YWRkcmVzcyAtZyAtTzAifV0sICJleGVjdXRvcnMiOiBbeyJjb21waWxlciI6IHsiaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQgLWZzYW5pdGl6ZT1hZGRyZXNzIC1nIC1PMCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre><span class="dim">(no output)</span>
+<span class="stderr">=================================================================
+==1879==ERROR: AddressSanitizer: heap-use-after-free on address 0x506000000020 at pc 0x7ff3b9a7f05f bp 0x7ffeb8e6c760 sp 0x7ffeb8e6bf08
+READ of size 20 at 0x506000000020 thread T0
+    #0 0x7ff3b9a7f05e in fwrite ../../../../src/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc:1110
+    #1 0x7ff3b9756dc3 in std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::__ostream_insert&lt;char, std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp;, char const*, long) (/lib/x86_64-linux-gnu/libstdc++.so.6+0x156dc3) (BuildId: 753c6c8608b61d4e67be8f0c890e03e0aa046b8b)
+    #2 0x56029261974a in std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::operator&lt;&lt; &lt;char, std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp;, std::basic_string_view&lt;char, std::char_traits&lt;char&gt; &gt;) /usr/include/c++/13/string_view:763
+    #3 0x56029261878f in main main.cpp:11
+    #4 0x7ff3b922a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #5 0x7ff3b922a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #6 0x560292618404 in _start (prog+0x2404) (BuildId: 191a377a680f6c084061363511e7aa8b5f82643b)
+
+0x506000000020 is located 0 bytes inside of 63-byte region [0x506000000020,0x50600000005f)
+freed by thread T0 here:
+    #0 0x7ff3b9aff5e8 in operator delete(void*, unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:164
+    #1 0x56029261a61a in std::__new_allocator&lt;char&gt;::deallocate(char*, unsigned long) /usr/include/c++/13/bits/new_allocator.h:172
+    #2 0x56029261a25f in std::allocator&lt;char&gt;::deallocate(char*, unsigned long) /usr/include/c++/13/bits/allocator.h:210
+    #3 0x56029261a25f in std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::deallocate(std::allocator&lt;char&gt;&amp;, char*, unsigned long) /usr/include/c++/13/bits/alloc_traits.h:517
+    #4 0x56029261a25f in std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::_M_destroy(unsigned long) /usr/include/c++/13/bits/basic_string.h:289
+    #5 0x560292619972 in std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::_M_dispose() /usr/include/c++/13/bits/basic_string.h:283
+    #6 0x560292618f4d in std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::~basic_string() /usr/include/c++/13/bits/basic_string.h:804
+    #7 0x560292618727 in main main.cpp:10
+    #8 0x7ff3b922a1c9 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #9 0x7ff3b922a28a in __libc_start_main_impl ../csu/libc-start.c:360
+    #10 0x560292618404 in _start (prog+0x2404) (BuildId: 191a377a680f6c084061363511e7aa8b5f82643b)
+
+previously allocated by thread T0 here:
+    #0 0x7ff3b9afe548 in operator new(unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:95
+    #1 0x56029261a683 in std::__new_allocator&lt;char&gt;::allocate(unsigned long, void const*) /usr/include/c++/13/bits/new_allocator.h:151
+    #2 0x56029261a4d5 in std::allocator&lt;char&gt;::allocate(unsigned long) /usr/include/c++/13/bits/allocator.h:198
+    #3 0x56029261a4d5 in std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::allocate(std::allocator&lt;char&gt;&amp;, unsigned long) /usr/include/c++/13/bits/alloc_traits.h:482
+... (42 more lines)</span>
+<span class="dim">[exit code 1]</span></pre></div></div>
+<div class="box tip">
+<p class="box-h">Tip: The habit that matters most</p>
+<p>Build and run your tests with <code>-fsanitize=address,undefined -g</code> during development. Most experienced C++ teams do this in their automated tests. Bugs that would take days to find in a debugger show up instantly with a line number.</p>
+</div>
+<h2 id="other-tools-in-the-same-family">Other tools in the same family</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Flag</th>
+<th>Finds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AddressSanitizer (ASan)</td>
+<td><code>-fsanitize=address</code></td>
+<td>out-of-bounds, use-after-free, double free, leaks</td>
+</tr>
+<tr>
+<td>UndefinedBehaviorSanitizer (UBSan)</td>
+<td><code>-fsanitize=undefined</code></td>
+<td>overflow, bad shifts, null deref, misaligned access …</td>
+</tr>
+<tr>
+<td>ThreadSanitizer (TSan)</td>
+<td><code>-fsanitize=thread</code></td>
+<td>data races between threads (chapter 25)</td>
+</tr>
+<tr>
+<td>MemorySanitizer (Clang)</td>
+<td><code>-fsanitize=memory</code></td>
+<td>reads of uninitialised memory</td>
+</tr>
+<tr>
+<td>Valgrind</td>
+<td><code>valgrind ./prog</code></td>
+<td>memory errors without recompiling (slower)</td>
+</tr>
+<tr>
+<td>Library debug mode</td>
+<td><code>-D_GLIBCXX_DEBUG</code> (GCC), <code>_ITERATOR_DEBUG_LEVEL</code> (MSVC)</td>
+<td>bad iterators and indices in the standard library</td>
+</tr>
+</tbody>
+</table>
+<h2 id="warnings-are-free-bug-reports">Warnings are free bug reports</h2>
+<p>Compilers can see many bugs before the program runs. Turn on the strictest useful warnings and treat them as errors in your own code:</p>
+<div class="code"><pre class="src plain"><code>g++<span class="w"> </span>-std<span class="o">=</span>c++23<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Wshadow<span class="w"> </span>-Wconversion<span class="w"> </span>-Werror<span class="w"> </span>main.cpp
+</code></pre></div>
+<div class="code run"><pre class="src"><code><span class="kt">int</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">factor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factor</span><span class="p">;</span><span class="w">      </span><span class="c1">// -Wconversion: double to int loses information</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">                </span><span class="c1">// -Wshadow: hides the parameter named value</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">value2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra -Wshadow -Wconversion -Werror main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiaW50IHNjYWxlKGludCB2YWx1ZSwgZG91YmxlIGZhY3Rvcikge1xuICAgIGludCB2YWx1ZTIgPSB2YWx1ZSAqIGZhY3RvcjsgICAgICAvLyAtV2NvbnZlcnNpb246IGRvdWJsZSB0byBpbnQgbG9zZXMgaW5mb3JtYXRpb25cbiAgICB7XG4gICAgICAgIGludCB2YWx1ZSA9IDM7ICAgICAgICAgICAgICAgIC8vIC1Xc2hhZG93OiBoaWRlcyB0aGUgcGFyYW1ldGVyIG5hbWVkIHZhbHVlXG4gICAgICAgIHJldHVybiB2YWx1ZTIgKyB2YWx1ZTtcbiAgICB9XG59XG5cbmludCBtYWluKCkgeyByZXR1cm4gc2NhbGUoMiwgMS41KTsgfVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIC1Xc2hhZG93IC1XY29udmVyc2lvbiAtV2Vycm9yIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIC1Xc2hhZG93IC1XY29udmVyc2lvbiAtV2Vycm9yIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out err"><div class="out-h">Compiler error (this is the point of the example)</div><pre>main.cpp: In function ‘int scale(int, double)’:
+main.cpp:2:24: error: conversion from ‘double’ to ‘int’ may change value [-Werror=float-conversion]
+    2 |     int value2 = value * factor;      // -Wconversion: double to int loses information
+      |                  ~~~~~~^~~~~~~~
+main.cpp:4:13: error: declaration of ‘int value’ shadows a parameter [-Werror=shadow]
+    4 |         int value = 3;                // -Wshadow: hides the parameter named value
+      |             ^~~~~
+main.cpp:1:15: note: shadowed declaration is here
+    1 | int scale(int value, double factor) {
+      |           ~~~~^~~~~
+cc1plus: all warnings being treated as errors</pre></div></div>
+<h2 id="using-a-debugger">Using a debugger</h2>
+<p>A debugger runs your program under control: pause at a line, inspect variables, step line by line, and see the call stack when it crashes. Compile with <code>-g -O0</code> (debug info, no optimisation), then:</p>
+<div class="code"><pre class="src plain"><code>gdb<span class="w"> </span>./prog<span class="w">            </span><span class="c1"># or lldb ./prog on macOS</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span><span class="k">break</span><span class="w"> </span>main.cpp:12<span class="w">     </span><span class="c1"># stop at line 12</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>run
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>next<span class="w">                  </span><span class="c1"># run the next line</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>step<span class="w">                  </span><span class="c1"># step into a function call</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>print<span class="w"> </span>total<span class="w">           </span><span class="c1"># show a variable</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span>bt<span class="w">                    </span><span class="c1"># backtrace: which functions called which</span>
+<span class="o">(</span>gdb<span class="o">)</span><span class="w"> </span><span class="k">continue</span>
+</code></pre></div>
+<p>When a program crashes with a segmentation fault, <code>gdb ./prog</code> then <code>run</code> then <code>bt</code> shows exactly which line crashed and how you got there. Your IDE (VS Code, CLion, Visual Studio) offers the same features with buttons, and is worth learning on day one.</p>
+<h2 id="debugging-habits-that-work">Debugging habits that work</h2>
+<ol>
+<li><strong>Reproduce</strong> the bug with the smallest input you can.</li>
+<li><strong>Read</strong> the first error or sanitizer report completely.</li>
+<li><strong>Rebuild with sanitizers</strong> before reaching for the debugger.</li>
+<li><strong>Bisect</strong>: comment out half, or check halfway with a print, until the faulty line is cornered.</li>
+<li><strong>Write a test</strong> that fails because of the bug, then fix it, so it can never come back (chapter 36).</li>
+</ol>
+<div class="quiz"><div class="quiz-h">Check yourself</div><div class="q"><p class="qq">A program with undefined behaviour prints the right answer on your machine. What can you conclude?</p><ol><li><button type="button" class="qopt" data-ok="1">Nothing: it may break with another compiler, other flags or other input</button></li><li><button type="button" class="qopt" data-ok="0">It is correct</button></li><li><button type="button" class="qopt" data-ok="0">The compiler fixed it</button></li></ol><p class="why" hidden>UB has no guaranteed behaviour, including appearing to work. </p></div><div class="q"><p class="qq">Which flag finds use-after-free and buffer overflows at run time?</p><ol><li><button type="button" class="qopt" data-ok="1">-fsanitize=address</button></li><li><button type="button" class="qopt" data-ok="0">-O3</button></li><li><button type="button" class="qopt" data-ok="0">-Wall</button></li></ol><p class="why" hidden>AddressSanitizer instruments every memory access. </p></div><div class="q"><p class="qq">Your program crashes with a segmentation fault. What is the fastest first step?</p><ol><li><button type="button" class="qopt" data-ok="1">Rebuild with -fsanitize=address -g and run it again</button></li><li><button type="button" class="qopt" data-ok="0">Add prints everywhere</button></li><li><button type="button" class="qopt" data-ok="0">Rewrite the program</button></li></ol><p class="why" hidden>The sanitizer report names the faulty line, the allocation and the free. </p></div></div>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="13-smart-pointers.html"><small>Previous</small>12 · Smart pointers and ownership</a><a class="next" href="../index.html"><small>Back to</small>Contents</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

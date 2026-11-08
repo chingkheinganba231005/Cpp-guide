@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>1 · Hello, C++ — Ground Up C++</title>
+<meta name="description" content="The shape of every program, printing, comments, and reading compiler errors.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="02-hello">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">I · The basics</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html"><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details open><summary>I · The basics</summary><ol><li><a href="02-hello.html" class=cur><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html"><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html"><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html"><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html"><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">I · The basics</div>
+        <h1><span class="n">1</span> Hello, C++</h1>
+        <p class="sum">The shape of every program, printing, comments, and reading compiler errors.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#the-shape-of-a-program">The shape of a program</a></li><li class="l2"><a href="#printing-several-things">Printing several things</a></li><li class="l2"><a href="#comments">Comments</a></li><li class="l2"><a href="#reading-compiler-errors-a-skill-not-a-punishment">Reading compiler errors (a skill, not a punishment)</a></li><li class="l2"><a href="#using-namespace-std-and-why-this-course-avoids-it">using namespace std;, and why this course avoids it</a></li></ol></nav>
+      <p>Every C++ program has the same skeleton. Once you can read it, and read the compiler's complaints when you get it wrong, you can learn everything else one piece at a time.</p>
+<h2 id="the-shape-of-a-program">The shape of a program</h2>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="w">    </span><span class="c1">// 1. bring in the input/output part of the standard library</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">           </span><span class="c1">// 2. every program starts running here</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello, world!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w">   </span><span class="c1">// 3. print a line</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">          </span><span class="c1">// 4. tell the operating system "everything went fine"</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPiAgICAvLyAxLiBicmluZyBpbiB0aGUgaW5wdXQvb3V0cHV0IHBhcnQgb2YgdGhlIHN0YW5kYXJkIGxpYnJhcnlcblxuaW50IG1haW4oKSB7ICAgICAgICAgICAvLyAyLiBldmVyeSBwcm9ncmFtIHN0YXJ0cyBydW5uaW5nIGhlcmVcbiAgICBzdGQ6OmNvdXQgPDwgXCJIZWxsbywgd29ybGQhXFxuXCI7ICAgLy8gMy4gcHJpbnQgYSBsaW5lXG4gICAgcmV0dXJuIDA7ICAgICAgICAgIC8vIDQuIHRlbGwgdGhlIG9wZXJhdGluZyBzeXN0ZW0gXCJldmVyeXRoaW5nIHdlbnQgZmluZVwiXG59XG4iLCAiY29tcGlsZXJzIjogW3siaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQifV0sICJleGVjdXRvcnMiOiBbeyJjb21waWxlciI6IHsiaWQiOiAiZzEzMiIsICJvcHRpb25zIjogIi1zdGQ9YysrMjMgLU8yIC1XYWxsIC1XZXh0cmEgLXB0aHJlYWQifSwgImFyZ3VtZW50cyI6ICIiLCAic3RkaW4iOiAiIn1dfV19" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>Hello, world!</pre></div></div>
+<p>Line by line:</p>
+<ol>
+<li><code>#include &lt;iostream&gt;</code> pastes in the declarations of the standard <strong>input/output stream</strong> library. Without it, the compiler has never heard of <code>std::cout</code>.</li>
+<li><code>int main()</code> defines a <strong>function</strong> called <code>main</code>. The operating system calls <code>main</code> when your program starts. <code>int</code> means it returns an integer to the operating system.</li>
+<li><code>std::cout &lt;&lt; "..."</code> sends text to the <strong>c</strong>haracter <strong>out</strong>put (your terminal). <code>std::</code> says “from the standard library”. <code>\n</code> is a newline.</li>
+<li><code>return 0;</code> ends <code>main</code> and reports success. In <code>main</code> only, you may leave it out and C++ assumes <code>return 0</code>.</li>
+</ol>
+<p>Three rules that apply everywhere:</p>
+<ul>
+<li><strong>Statements end with a semicolon</strong> <code>;</code>.</li>
+<li><strong>Curly braces <code>{ }</code> group code</strong> into blocks. Indentation is for humans only; the compiler ignores it.</li>
+<li><strong>C++ is case-sensitive</strong>: <code>Main</code> is not <code>main</code>.</li>
+</ul>
+<div class="box python">
+<p class="box-h">Coming from Python</p>
+<p>Python uses indentation and line ends to structure code. C++ uses <code>{ }</code> and <code>;</code>. You can write a whole C++ program on one line (please don't), and indenting badly changes nothing for the compiler. Indent anyway: four spaces, like Python.</p>
+</div>
+<h2 id="printing-several-things">Printing several things</h2>
+<p><code>&lt;&lt;</code> can be chained. Numbers are printed as you'd expect:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"2 + 3 = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"A line"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"and another"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"pi is about "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">3.14159</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OmNvdXQgPDwgXCIyICsgMyA9IFwiIDw8IDIgKyAzIDw8ICdcXG4nO1xuICAgIHN0ZDo6Y291dCA8PCBcIkEgbGluZVwiIDw8ICdcXG4nIDw8IFwiYW5kIGFub3RoZXJcIiA8PCAnXFxuJztcbiAgICBzdGQ6OmNvdXQgPDwgXCJwaSBpcyBhYm91dCBcIiA8PCAzLjE0MTU5IDw8ICdcXG4nO1xufVxuIiwgImNvbXBpbGVycyI6IFt7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn1dLCAiZXhlY3V0b3JzIjogW3siY29tcGlsZXIiOiB7ImlkIjogImcxMzIiLCAib3B0aW9ucyI6ICItc3RkPWMrKzIzIC1PMiAtV2FsbCAtV2V4dHJhIC1wdGhyZWFkIn0sICJhcmd1bWVudHMiOiAiIiwgInN0ZGluIjogIiJ9XX1dfQ%3D%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>2 + 3 = 5
+A line
+and another
+pi is about 3.14159</pre></div></div>
+<p><code>'\n'</code> (single quotes) is a single character, and <code>"\n"</code> (double quotes) is a piece of text containing one character. Both print a newline. You will also see <code>std::endl</code> in older code; it prints a newline <em>and</em> forces the output to be written immediately, which is slower. Prefer <code>'\n'</code>.</p>
+<h2 id="comments">Comments</h2>
+<div class="code"><div class=code-title> <span class="tag">not run here</span></div><pre class="src"><code><span class="c1">// a comment to the end of the line (like Python's #)</span>
+
+<span class="cm">/* a comment that can</span>
+<span class="cm">   span several lines */</span>
+</code></pre></div>
+<h2 id="reading-compiler-errors-a-skill-not-a-punishment">Reading compiler errors (a skill, not a punishment)</h2>
+<p>You will see thousands of compiler errors. Reading them calmly is one of the most valuable skills in C++. Here is a classic: a missing semicolon.</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello"</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"World</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OmNvdXQgPDwgXCJIZWxsb1wiXG4gICAgc3RkOjpjb3V0IDw8IFwiV29ybGRcXG5cIjtcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out err"><div class="out-h">Compiler error (this is the point of the example)</div><pre>main.cpp: In function ‘int main()’:
+main.cpp:4:25: error: expected ‘;’ before ‘std’
+    4 |     std::cout &lt;&lt; &quot;Hello&quot;
+      |                         ^
+      |                         ;
+    5 |     std::cout &lt;&lt; &quot;World\n&quot;;
+      |     ~~~                  </pre></div></div>
+<p>How to read it:</p>
+<ul>
+<li><code>main.cpp:4:25</code> means <strong>file : line : column</strong>. Go there first.</li>
+<li>The message says <code>expected ';' before 'std'</code>: the compiler reached <code>std</code> on the next line while still waiting for the <code>;</code> that ends line 4.</li>
+<li><strong>Fix the first error first.</strong> One mistake can cause a cascade of confusing errors below it; often fixing the first makes the rest disappear.</li>
+</ul>
+<p>Another classic: forgetting the <code>#include</code>.</p>
+<div class="code run"><pre class="src"><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"no include!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiaW50IG1haW4oKSB7XG4gICAgc3RkOjpjb3V0IDw8IFwibm8gaW5jbHVkZSFcXG5cIjtcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out err"><div class="out-h">Compiler error (this is the point of the example)</div><pre>main.cpp: In function ‘int main()’:
+main.cpp:2:10: error: ‘cout’ is not a member of ‘std’
+    2 |     std::cout &lt;&lt; &quot;no include!\n&quot;;
+      |          ^~~~
+main.cpp:1:1: note: ‘std::cout’ is defined in header ‘&lt;iostream&gt;’; did you forget to ‘#include &lt;iostream&gt;’?
+  +++ |+#include &lt;iostream&gt;
+    1 | int main() {</pre></div></div>
+<p>GCC even suggests the fix: <code>'std::cout' is defined in header '&lt;iostream&gt;'; this is probably fixable by adding '#include &lt;iostream&gt;'</code>. Modern compilers are helpful if you actually read the whole message.</p>
+<div class="box tip">
+<p class="box-h">Tip</p>
+<p>Copy the first error line into a search engine if it confuses you. Thousands of people have hit exactly the same message.</p>
+</div>
+<h2 id="using-namespace-std-and-why-this-course-avoids-it"><code>using namespace std;</code>, and why this course avoids it</h2>
+<p>Many tutorials start with <code>using namespace std;</code> so they can write <code>cout</code> instead of <code>std::cout</code>. In real projects it is discouraged: the standard library has thousands of names (<code>count</code>, <code>distance</code>, <code>size</code> …) and pulling them all in causes name clashes. This course writes <code>std::</code> explicitly. It is five characters, and it tells the reader where things come from.</p>
+<div class="box exercise">
+<p class="box-h">Exercise: Personal banner</p>
+<p>Write a program that prints your name in a box made of <code>*</code> characters, like:</p>
+<div class="code"><pre class="src plain"><code>**************
+* Your Name  *
+**************
+</code></pre></div>
+<details>
+<summary>Show a solution</summary>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"**************</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"* Your Name  *</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"**************</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OmNvdXQgPDwgXCIqKioqKioqKioqKioqKlxcblwiO1xuICAgIHN0ZDo6Y291dCA8PCBcIiogWW91ciBOYW1lICAqXFxuXCI7XG4gICAgc3RkOjpjb3V0IDw8IFwiKioqKioqKioqKioqKipcXG5cIjtcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>**************
+* Your Name  *
+**************</pre></div></div>
+</details>
+</div>
+<div class="quiz"><div class="quiz-h">Check yourself</div><div class="q"><p class="qq">Where does a C++ program start running?</p><ol><li><button type="button" class="qopt" data-ok="0">At the first line of the file</button></li><li><button type="button" class="qopt" data-ok="1">In the function main</button></li><li><button type="button" class="qopt" data-ok="0">At the first #include</button></li></ol><p class="why" hidden>The operating system calls main(). Code outside functions (like #include) is instructions to the compiler, not steps that run. </p></div><div class="q"><p class="qq">The compiler reports 12 errors. What should you do first?</p><ol><li><button type="button" class="qopt" data-ok="1">Fix the first error, then compile again</button></li><li><button type="button" class="qopt" data-ok="0">Fix the last error</button></li><li><button type="button" class="qopt" data-ok="0">Fix them all at once</button></li></ol><p class="why" hidden>Later errors are often consequences of the first one. </p></div></div>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="01-setup.html"><small>Previous</small>0.2 · Your tools: compiler, editor, terminal</a><a class="next" href="03-variables.html"><small>Next</small>2 · Variables and types</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

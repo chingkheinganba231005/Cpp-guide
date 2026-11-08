@@ -1,0 +1,59 @@
+{
+  "parts": [
+    {"n": "0", "title": "Before you start", "blurb": "What C++ is, why it is fast, and how source code becomes a program you can run.", "chapters": [
+      {"id": "00-why-cpp", "n": "0.1", "title": "Why C++, and how it differs from Python", "summary": "Compiled vs interpreted, what “close to the machine” means, and what you can build."},
+      {"id": "01-setup", "n": "0.2", "title": "Your tools: compiler, editor, terminal", "summary": "Install a compiler, compile your first file, and use Compiler Explorer in the browser."}
+    ]},
+    {"n": "I", "title": "The basics", "blurb": "Everything you need to write small programs: types, decisions, loops, functions, text and lists.", "chapters": [
+      {"id": "02-hello", "n": "1", "title": "Hello, C++", "summary": "The shape of every program, printing, comments, and reading compiler errors."},
+      {"id": "03-variables", "n": "2", "title": "Variables and types", "summary": "Static typing, int, double, char, bool, auto, const, and how numbers really work."},
+      {"id": "04-operators", "n": "3", "title": "Operators and expressions", "summary": "Arithmetic, integer division, comparisons, logic, and the traps Python never had."},
+      {"id": "05-control", "n": "4", "title": "Decisions and loops", "summary": "if, switch, while, for, range-for, break and continue."},
+      {"id": "06-functions", "n": "5", "title": "Functions", "summary": "Parameters, return values, overloading, default arguments, recursion, declarations."},
+      {"id": "07-strings", "n": "6", "title": "Text and input", "summary": "std::string, reading input, string_view, and formatting output with std::format."},
+      {"id": "08-vectors", "n": "7", "title": "Lists of things: vector and array", "summary": "std::vector, std::array, indexing, bounds, and looping over collections."}
+    ]},
+    {"n": "II", "title": "Memory and the machine", "blurb": "The part Python hides: where your data lives, how to point at it, and how to own it safely.", "chapters": [
+      {"id": "09-memory", "n": "8", "title": "How memory works", "summary": "Bytes, addresses, the stack, sizeof, and what a variable really is."},
+      {"id": "10-references", "n": "9", "title": "References", "summary": "Second names for existing objects, and pass-by-reference."},
+      {"id": "11-pointers", "n": "10", "title": "Pointers", "summary": "Addresses as values: &, *, nullptr, arrays, and pointer arithmetic."},
+      {"id": "12-heap", "n": "11", "title": "The heap: new and delete", "summary": "Dynamic memory, lifetimes, leaks and dangling pointers."},
+      {"id": "13-smart-pointers", "n": "12", "title": "Smart pointers and ownership", "summary": "unique_ptr, shared_ptr, weak_ptr: memory that cleans itself up."},
+      {"id": "14-ub-debugging", "n": "13", "title": "Undefined behaviour, sanitizers, debuggers", "summary": "Why C++ bugs are strange, and the tools that catch them."}
+    ]},
+    {"n": "III", "title": "Building your own types", "blurb": "Classes, resource management, generic code and the standard library: the heart of C++.", "chapters": [
+      {"id": "15-classes", "n": "14", "title": "Structs and classes", "summary": "Members, methods, constructors, invariants and encapsulation."},
+      {"id": "16-raii-move", "n": "15", "title": "RAII, copying and moving", "summary": "Destructors, the rule of 0/3/5, lvalues, rvalues and move semantics."},
+      {"id": "17-operators-overloading", "n": "16", "title": "Operator overloading", "summary": "Make your types feel built in: +, ==, <=>, [], <<."},
+      {"id": "18-inheritance", "n": "17", "title": "Inheritance and polymorphism", "summary": "virtual functions, vtables, interfaces, and when not to use them."},
+      {"id": "19-templates", "n": "18", "title": "Templates", "summary": "Write code once for many types: function and class templates."},
+      {"id": "20-stl", "n": "19", "title": "The standard library: containers and algorithms", "summary": "map, unordered_map, set, deque; iterators, algorithms and lambdas; Big-O."},
+      {"id": "21-errors", "n": "20", "title": "Errors: exceptions, optional, expected", "summary": "Reporting and handling failure the C++ way."},
+      {"id": "22-projects", "n": "21", "title": "Real projects: headers, linking, CMake", "summary": "Split code into files, understand the linker, build with CMake, use libraries."}
+    ]},
+    {"n": "IV", "title": "Modern and advanced C++", "blurb": "The tools experts use: compile-time programming, concepts, concurrency and performance.", "chapters": [
+      {"id": "23-modern", "n": "22", "title": "The modern toolkit", "summary": "Structured bindings, enum class, variant, span, string_view, ranges."},
+      {"id": "24-generic", "n": "23", "title": "Advanced templates and concepts", "summary": "Concepts, variadic templates, fold expressions, type traits, CRTP."},
+      {"id": "25-constexpr", "n": "24", "title": "Compile-time programming", "summary": "constexpr, consteval, if constexpr: let the compiler do the work."},
+      {"id": "26-concurrency", "n": "25", "title": "Concurrency: threads, locks, atomics", "summary": "Data races, mutexes, condition variables, atomics, memory order, thread pools."},
+      {"id": "27-performance", "n": "26", "title": "Performance: how the CPU really runs your code", "summary": "Caches, data-oriented design, branch prediction, SIMD, benchmarking."}
+    ]},
+    {"n": "V", "title": "Projects: engines, ML and GPUs", "blurb": "Build real systems from scratch, the way they are built in industry.", "chapters": [
+      {"id": "28-allocators", "n": "27", "title": "Project: custom memory allocators", "summary": "Arena and pool allocators, the building blocks of engines and trading systems."},
+      {"id": "29-game-engine", "n": "28", "title": "Project: a game engine core", "summary": "Game loop, fixed timestep, an entity-component system, physics."},
+      {"id": "30-renderer", "n": "29", "title": "Project: a software renderer", "summary": "Draw triangles yourself: rasterisation, depth buffer, shading, images."},
+      {"id": "31-ml-library", "n": "30", "title": "Project: your own ML library", "summary": "Tensors, automatic differentiation, a neural network trained from scratch."},
+      {"id": "32-fast-matmul", "n": "31", "title": "Project: fast matrix multiplication", "summary": "From naive to cache-blocked, SIMD and multithreaded: 100× faster."},
+      {"id": "33-gpu", "n": "32", "title": "GPU programming and your own kernels", "summary": "CUDA's model: threads, blocks, shared memory; matmul and reduction kernels."}
+    ]},
+    {"n": "VI", "title": "Low latency and systems", "blurb": "The techniques behind trading engines, servers and operating-system-level code.", "chapters": [
+      {"id": "34-trading-engine", "n": "33", "title": "Project: a low-latency matching engine", "summary": "Order books, matching, latency measurement, avoiding allocations."},
+      {"id": "35-lock-free", "n": "34", "title": "Lock-free queues and inter-thread messaging", "summary": "A single-producer single-consumer ring buffer, false sharing, and busy-polling."},
+      {"id": "36-systems", "n": "35", "title": "Systems programming: files, processes, sockets", "summary": "Talk to the operating system: I/O, memory mapping, a TCP server."}
+    ]},
+    {"n": "VII", "title": "Becoming an expert", "blurb": "How professionals write, test and grow C++ code, and where to go next.", "chapters": [
+      {"id": "37-testing", "n": "36", "title": "Testing, tooling and code quality", "summary": "Unit tests, warnings, sanitizers in CI, clang-tidy, formatting."},
+      {"id": "38-next", "n": "37", "title": "Where to go next", "summary": "A roadmap for each specialisation, books, and projects to build."}
+    ]}
+  ]
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>0.2 · Your tools: compiler, editor, terminal — Ground Up C++</title>
+<meta name="description" content="Install a compiler, compile your first file, and use Compiler Explorer in the browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="01-setup">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">0 · Before you start</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details open><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html" class=cur><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details><summary>I · The basics</summary><ol><li><a href="02-hello.html"><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html"><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html"><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html"><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html"><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">0 · Before you start</div>
+        <h1><span class="n">0.2</span> Your tools: compiler, editor, terminal</h1>
+        <p class="sum">Install a compiler, compile your first file, and use Compiler Explorer in the browser.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#the-fastest-start-compiler-explorer-in-your-browser">The fastest start: Compiler Explorer in your browser</a></li><li class="l2"><a href="#installing-a-compiler">Installing a compiler</a></li><li class="l2"><a href="#your-first-compile-step-by-step">Your first compile, step by step</a></li><li class="l2"><a href="#what-happens-when-you-compile">What happens when you compile</a></li><li class="l2"><a href="#build-systems-briefly">Build systems, briefly</a></li></ol></nav>
+      <p>To write C++ you need three things: a <strong>compiler</strong> (turns source code into a program), an <strong>editor</strong> (where you type), and a <strong>terminal</strong> (where you run the compiler and your program). This chapter sets them up and walks through what happens when you compile.</p>
+<h2 id="the-fastest-start-compiler-explorer-in-your-browser">The fastest start: Compiler Explorer in your browser</h2>
+<p>Before installing anything, open <a href="https://godbolt.org">Compiler Explorer (godbolt.org)</a>. Choose C++ on the left, type code, and it compiles instantly. Turn on “Output” to run the program. Every runnable example in this course has an <strong>Open in Compiler Explorer</strong> link that loads the example there, ready to run and edit. It is the best way to experiment while you read.</p>
+<h2 id="installing-a-compiler">Installing a compiler</h2>
+<p>There are three major compilers: <strong>GCC</strong> (<code>g++</code>), <strong>Clang</strong> (<code>clang++</code>) and Microsoft's <strong>MSVC</strong>. All are excellent and free.</p>
+<table>
+<thead>
+<tr>
+<th>Your system</th>
+<th>What to install</th>
+<th>Check it worked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Windows</strong></td>
+<td><a href="https://visualstudio.microsoft.com/">Visual Studio Community</a> with “Desktop development with C++” (MSVC), <em>or</em> WSL (Windows Subsystem for Linux) and then the Linux steps</td>
+<td><code>cl</code> in the “Developer Command Prompt”, or <code>g++ --version</code> in WSL</td>
+</tr>
+<tr>
+<td><strong>macOS</strong></td>
+<td>Run <code>xcode-select --install</code> in Terminal (installs Clang)</td>
+<td><code>clang++ --version</code></td>
+</tr>
+<tr>
+<td><strong>Linux</strong> (Ubuntu/Debian)</td>
+<td><code>sudo apt install build-essential gdb cmake</code></td>
+<td><code>g++ --version</code></td>
+</tr>
+</tbody>
+</table>
+<p>You want a version from 2023 or later (GCC 13+, Clang 17+, Visual Studio 2022) so that C++23 features work.</p>
+<p>For the editor, <strong>VS Code</strong> with Microsoft's C/C++ extension (or the clangd extension) is a good default. CLion and Visual Studio are full IDEs (editor + compiler + debugger in one).</p>
+<h2 id="your-first-compile-step-by-step">Your first compile, step by step</h2>
+<p>Save this as <code>hello.cpp</code>:</p>
+<div class="code run"><pre class="src"><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Hello from C++!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><div class="code-bar"><span class="cmd">$ g++ -std=c++23 -O2 -Wall -Wextra main.cpp -o prog</span><a class="gb" href="https://godbolt.org/clientstate/eyJzZXNzaW9ucyI6IFt7ImlkIjogMSwgImxhbmd1YWdlIjogImMrKyIsICJzb3VyY2UiOiAiI2luY2x1ZGUgPGlvc3RyZWFtPlxuXG5pbnQgbWFpbigpIHtcbiAgICBzdGQ6OmNvdXQgPDwgXCJIZWxsbyBmcm9tIEMrKyFcXG5cIjtcbn1cbiIsICJjb21waWxlcnMiOiBbeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9XSwgImV4ZWN1dG9ycyI6IFt7ImNvbXBpbGVyIjogeyJpZCI6ICJnMTMyIiwgIm9wdGlvbnMiOiAiLXN0ZD1jKysyMyAtTzIgLVdhbGwgLVdleHRyYSAtcHRocmVhZCJ9LCAiYXJndW1lbnRzIjogIiIsICJzdGRpbiI6ICIifV19XX0%3D" target="_blank" rel="noopener">Open in Compiler Explorer ↗</a></div><div class="out"><div class="out-h">Output</div><pre>Hello from C++!</pre></div></div>
+<p>Then in a terminal, in the same folder:</p>
+<div class="code"><pre class="src plain"><code>g++<span class="w"> </span>-std<span class="o">=</span>c++23<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>hello.cpp<span class="w"> </span>-o<span class="w"> </span>hello<span class="w">    </span><span class="c1"># compile: creates a program called "hello"</span>
+./hello<span class="w">                                            </span><span class="c1"># run it (on Windows: hello.exe)</span>
+</code></pre></div>
+<p>What the flags mean:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-std=c++23</code></td>
+<td>use the C++23 standard (newest features)</td>
+</tr>
+<tr>
+<td><code>-Wall -Wextra</code></td>
+<td>turn on (almost) all <strong>warnings</strong>: the compiler tells you about suspicious code. Always use them.</td>
+</tr>
+<tr>
+<td><code>-o hello</code></td>
+<td>name of the output program (default would be <code>a.out</code>)</td>
+</tr>
+<tr>
+<td><code>-O2</code></td>
+<td>optimise for speed (use for anything you measure)</td>
+</tr>
+<tr>
+<td><code>-g</code></td>
+<td>include debugging information (for the debugger, chapter 13)</td>
+</tr>
+</tbody>
+</table>
+<div class="box python">
+<p class="box-h">Coming from Python</p>
+<p>In Python you run <code>python hello.py</code> and that's it. In C++ there are two steps: <strong>compile</strong> once, then <strong>run</strong> as often as you like. If you change the code, you must compile again. Forgetting to recompile and wondering why nothing changed is everyone's first C++ mistake.</p>
+</div>
+<h2 id="what-happens-when-you-compile">What happens when you compile</h2>
+<div class="code"><pre class="src plain"><code> hello.cpp ──▶ preprocessor ──▶ compiler ──▶ assembler ──▶ linker ──▶ hello (executable)
+            (#include pasted in)  (C++ → assembly)  (→ machine code .o)  (joins your code with the libraries)
+</code></pre></div>
+<ol>
+<li><strong>Preprocessor</strong>: handles lines starting with <code>#</code>. <code>#include &lt;iostream&gt;</code> literally pastes in the declarations for input/output.</li>
+<li><strong>Compiler</strong>: checks your code (types, syntax) and translates it to assembly language for your CPU.</li>
+<li><strong>Assembler</strong>: turns assembly into machine code, an <em>object file</em>.</li>
+<li><strong>Linker</strong>: combines your object files with the libraries you use (like the code behind <code>std::cout</code>) into one executable.</li>
+</ol>
+<p>Most of the time you don't think about these steps. They matter when something goes wrong: a <em>compile error</em> comes from step 2, and a <em>linker error</em> (“undefined reference to …”) comes from step 4. Chapter 21 explains linker errors properly.</p>
+<div class="box deep">
+<p class="box-h">Under the hood</p>
+<p>You can see the assembly your code turns into: in Compiler Explorer it is the right-hand panel. Locally, <code>g++ -O2 -S hello.cpp</code> writes <code>hello.s</code>. You don't need to read assembly to learn C++, but peeking at it later in the course shows exactly what “zero-cost” means.</p>
+</div>
+<h2 id="build-systems-briefly">Build systems, briefly</h2>
+<p>For one file, typing the <code>g++</code> command is fine. Real projects have hundreds of files, and you use a <strong>build system</strong>. The standard one is <strong>CMake</strong>, which chapter 21 teaches. You will see <code>CMakeLists.txt</code> files in almost every open-source C++ project.</p>
+<div class="quiz"><div class="quiz-h">Check yourself</div><div class="q"><p class="qq">You edited hello.cpp and ran ./hello again, but the old message still prints. Why?</p><ol><li><button type="button" class="qopt" data-ok="0">C++ caches output</button></li><li><button type="button" class="qopt" data-ok="1">You didn't recompile; ./hello is still the old program</button></li><li><button type="button" class="qopt" data-ok="0">The terminal needs restarting</button></li></ol><p class="why" hidden>The executable is a separate file made by the compiler. Change the source, and you must compile again. </p></div><div class="q"><p class="qq">Which flags should you almost always use while learning?</p><ol><li><button type="button" class="qopt" data-ok="1">-Wall -Wextra</button></li><li><button type="button" class="qopt" data-ok="0">-O3 only</button></li><li><button type="button" class="qopt" data-ok="0">-w (no warnings)</button></li></ol><p class="why" hidden>Warnings point at code that compiles but is probably wrong. Turn them on and read them. </p></div></div>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="00-why-cpp.html"><small>Previous</small>0.1 · Why C++, and how it differs from Python</a><a class="next" href="02-hello.html"><small>Next</small>1 · Hello, C++</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

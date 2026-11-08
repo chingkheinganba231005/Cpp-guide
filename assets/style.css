@@ -66,7 +66,8 @@ h3{font:700 1.22rem/1.3 var(--display);margin:30px 0 8px}
 p,ul,ol{margin:0 0 16px} li{margin-bottom:4px}
 code,pre,.mem-code,.bit,.term{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
 code{font:0.84em var(--mono);background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:.05em .32em}
-pre code{background:none;border:0;padding:0;font-size:inherit}
+pre code{background:none;border:0;padding:0;font-size:inherit;overflow-wrap:normal}
+:not(pre) > code{overflow-wrap:anywhere}
 table{border-collapse:collapse;width:100%;font:15px/1.45 var(--ui);margin:10px 0 20px;font-variant-numeric:tabular-nums}
 th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
 th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}

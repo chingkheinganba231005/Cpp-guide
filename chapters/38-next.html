@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>37 · Where to go next — Ground Up C++</title>
+<meta name="description" content="A roadmap for each specialisation, books, and projects to build.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('guc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head><body data-ch="38-next">
+<a class="skip" href="#content">Skip to content</a>
+<div class="progress" id="progress"></div>
+<header class="top">
+  <a class="brand" href="../index.html">Ground Up <b>C++</b></a>
+  <span class="crumb">VII · Becoming an expert</span>
+  <span class="sp"></span>
+  <button class="tbtn" id="menu-btn" type="button" aria-controls="rail" aria-expanded="false">Chapters</button>
+  <button class="tbtn" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+</header>
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="All chapters"><details><summary>0 · Before you start</summary><ol><li><a href="00-why-cpp.html"><span class="num">0.1</span>Why C++, and how it differs from Python</a></li><li><a href="01-setup.html"><span class="num">0.2</span>Your tools: compiler, editor, terminal</a></li></ol></details><details><summary>I · The basics</summary><ol><li><a href="02-hello.html"><span class="num">1</span>Hello, C++</a></li><li><a href="03-variables.html"><span class="num">2</span>Variables and types</a></li><li><a href="04-operators.html"><span class="num">3</span>Operators and expressions</a></li><li><a href="05-control.html"><span class="num">4</span>Decisions and loops</a></li><li><a href="06-functions.html"><span class="num">5</span>Functions</a></li><li><a href="07-strings.html"><span class="num">6</span>Text and input</a></li><li><a href="08-vectors.html"><span class="num">7</span>Lists of things: vector and array</a></li></ol></details><details><summary>II · Memory and the machine</summary><ol><li><a href="09-memory.html"><span class="num">8</span>How memory works</a></li><li><a href="10-references.html"><span class="num">9</span>References</a></li><li><a href="11-pointers.html"><span class="num">10</span>Pointers</a></li><li><a href="12-heap.html"><span class="num">11</span>The heap: new and delete</a></li><li><a href="13-smart-pointers.html"><span class="num">12</span>Smart pointers and ownership</a></li><li><a href="14-ub-debugging.html"><span class="num">13</span>Undefined behaviour, sanitizers, debuggers</a></li></ol></details><details><summary>III · Building your own types</summary><ol><li><a href="15-classes.html"><span class="num">14</span>Structs and classes</a></li><li><a href="16-raii-move.html"><span class="num">15</span>RAII, copying and moving</a></li><li><a href="17-operators-overloading.html"><span class="num">16</span>Operator overloading</a></li><li><a href="18-inheritance.html"><span class="num">17</span>Inheritance and polymorphism</a></li><li><a href="19-templates.html"><span class="num">18</span>Templates</a></li><li><a href="20-stl.html"><span class="num">19</span>The standard library: containers and algorithms</a></li><li><a href="21-errors.html"><span class="num">20</span>Errors: exceptions, optional, expected</a></li><li><a href="22-projects.html"><span class="num">21</span>Real projects: headers, linking, CMake</a></li></ol></details><details><summary>IV · Modern and advanced C++</summary><ol><li><a href="23-modern.html"><span class="num">22</span>The modern toolkit</a></li><li><a href="24-generic.html"><span class="num">23</span>Advanced templates and concepts</a></li><li><a href="25-constexpr.html"><span class="num">24</span>Compile-time programming</a></li><li><a href="26-concurrency.html"><span class="num">25</span>Concurrency: threads, locks, atomics</a></li><li><a href="27-performance.html"><span class="num">26</span>Performance: how the CPU really runs your code</a></li></ol></details><details><summary>V · Projects: engines, ML and GPUs</summary><ol><li><a href="28-allocators.html"><span class="num">27</span>Project: custom memory allocators</a></li><li><a href="29-game-engine.html"><span class="num">28</span>Project: a game engine core</a></li><li><a href="30-renderer.html"><span class="num">29</span>Project: a software renderer</a></li><li><a href="31-ml-library.html"><span class="num">30</span>Project: your own ML library</a></li><li><a href="32-fast-matmul.html"><span class="num">31</span>Project: fast matrix multiplication</a></li><li><a href="33-gpu.html"><span class="num">32</span>GPU programming and your own kernels</a></li></ol></details><details><summary>VI · Low latency and systems</summary><ol><li><a href="34-trading-engine.html"><span class="num">33</span>Project: a low-latency matching engine</a></li><li><a href="35-lock-free.html"><span class="num">34</span>Lock-free queues and inter-thread messaging</a></li><li><a href="36-systems.html"><span class="num">35</span>Systems programming: files, processes, sockets</a></li></ol></details><details open><summary>VII · Becoming an expert</summary><ol><li><a href="37-testing.html"><span class="num">36</span>Testing, tooling and code quality</a></li><li><a href="38-next.html" class=cur><span class="num">37</span>Where to go next</a></li></ol></details></nav>
+  <main id="content">
+    <article>
+      <div class="head">
+        <div class="part">VII · Becoming an expert</div>
+        <h1><span class="n">37</span> Where to go next</h1>
+        <p class="sum">A roadmap for each specialisation, books, and projects to build.</p>
+      </div>
+      <nav class="onpage" aria-label="On this page"><b>On this page</b><ol><li class="l2"><a href="#how-to-keep-improving">How to keep improving</a></li><li class="l2"><a href="#roadmaps-by-goal">Roadmaps by goal</a></li><li class="l2"><a href="#books-for-c-itself">Books for C++ itself</a></li><li class="l2"><a href="#five-capstone-projects">Five capstone projects</a></li></ol></nav>
+      <p>You have travelled from <code>int main()</code> to memory and ownership, modern C++, concurrency, performance engineering, and real systems: allocators, an ECS, a rasteriser, autograd, a fast matmul, GPU kernels, a matching engine, lock-free queues and sockets. This last chapter gives you a map for going deeper in each direction.</p>
+<h2 id="how-to-keep-improving">How to keep improving</h2>
+<ol>
+<li><strong>Build things</strong>, then rebuild them faster. Every project in Part V and Part VI has an extension exercise; finish those first.</li>
+<li><strong>Read great code.</strong> Pick a well-written codebase in your area and read it slowly: EnTT (ECS), raylib (games), llama.cpp (ML inference), Abseil and folly (libraries), the LLVM sources (compilers).</li>
+<li><strong>Measure everything.</strong> Keep a benchmark next to every performance claim you make, as this course did.</li>
+<li><strong>Watch talks.</strong> CppCon, C++Now and Meeting C++ publish their talks for free. Start with Chandler Carruth on performance, Mike Acton's “Data-Oriented Design and C++”, and Herb Sutter on modern C++.</li>
+</ol>
+<h2 id="roadmaps-by-goal">Roadmaps by goal</h2>
+<h3 id="games-and-engines">Games and engines</h3>
+<ul>
+<li><strong>Learn</strong>: SDL3 or GLFW and <strong>OpenGL 4.x</strong> first (simplest to start), then <strong>Vulkan</strong> (or DirectX 12 / Metal) for full control. Read LearnOpenGL.com and <em>Real-Time Rendering</em>.</li>
+<li><strong>Engine architecture</strong>: <em>Game Engine Architecture</em> (Gregory); <em>Game Programming Patterns</em> (Nystrom, free online).</li>
+<li><strong>Physics</strong>: <em>Game Physics Engine Development</em> (Millington); study Box2D and Jolt Physics.</li>
+<li><strong>Projects</strong>: extend chapter 28 into a 2D platformer with raylib; port chapter 29's rasteriser to a GPU with OpenGL; add a job system and a Dear ImGui editor.</li>
+</ul>
+<h3 id="custom-engines-and-graphics">Custom engines and graphics</h3>
+<ul>
+<li><strong>Graphics programming</strong>: <em>Physically Based Rendering</em> (Pharr, Jakob and Humphreys, free online), <em>Ray Tracing in One Weekend</em> (free).</li>
+<li><strong>Projects</strong>: a path tracer with BVH acceleration and multithreading; a Vulkan renderer with deferred shading.</li>
+</ul>
+<h3 id="machine-learning-systems-and-libraries">Machine-learning systems and libraries</h3>
+<ul>
+<li><strong>Learn</strong>: the PyTorch internals (ATen, the dispatcher, autograd), and read llama.cpp and ggml for compact, practical ML code.</li>
+<li><strong>Numerical computing</strong>: Eigen; BLAS and LAPACK; <em>What Every Programmer Should Know About Memory</em> (Drepper).</li>
+<li><strong>Projects</strong>: grow chapter 30 into a tensor library with broadcasting, a tape-based autograd and a CPU matmul backend from chapter 31; train an MLP on MNIST; write a PyTorch C++ extension.</li>
+</ul>
+<h3 id="gpu-programming-and-kernels">GPU programming and kernels</h3>
+<ul>
+<li><strong>Learn</strong>: <em>Programming Massively Parallel Processors</em> (Hwu, Kirk and El Hajj); NVIDIA's CUDA C++ Programming Guide; then CUTLASS/CuTe and Triton.</li>
+<li><strong>Projects</strong>: implement chapter 32's kernels and measure them against cuBLAS; write a fused softmax, then a FlashAttention-style tiled attention kernel; profile everything with Nsight Compute.</li>
+</ul>
+<h3 id="low-latency-trading-and-finance">Low-latency trading and finance</h3>
+<ul>
+<li><strong>Learn</strong>: market microstructure (<em>Trading and Exchanges</em>, Harris); exchange protocols (FIX, ITCH, SBE); Linux performance (<code>perf</code>, CPU isolation, huge pages); CppCon talks by Carl Cook (“When a Microsecond Is an Eternity”) and others.</li>
+<li><strong>Projects</strong>: extend chapter 33 with order modification and IOC orders; feed it with a parser for real ITCH sample data; connect the book, a strategy and a logger with chapter 34's queues; measure end-to-end latency from packet to order.</li>
+</ul>
+<h3 id="systems-programming">Systems programming</h3>
+<ul>
+<li><strong>Learn</strong>: <em>The Linux Programming Interface</em> (Kerrisk); <em>Computer Systems: A Programmer's Perspective</em> (Bryant and O'Hallaron); Asio for networking.</li>
+<li><strong>Projects</strong>: an HTTP server with <code>epoll</code> (or io_uring); a key-value store with a write-ahead log and memory-mapped files; a small interpreter or compiler front end.</li>
+</ul>
+<h2 id="books-for-c-itself">Books for C++ itself</h2>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Book</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foundations</td>
+<td><em>A Tour of C++</em> (Stroustrup, 3rd ed.), a fast overview of modern C++</td>
+</tr>
+<tr>
+<td>Thorough</td>
+<td><em>C++ Primer</em> (Lippman, Lajoie and Moo); <em>Programming: Principles and Practice Using C++</em> (Stroustrup, 3rd ed.)</td>
+</tr>
+<tr>
+<td>Modern idioms</td>
+<td><em>Effective Modern C++</em> (Meyers); <em>C++ Move Semantics</em> and <em>C++17 – The Complete Guide</em> (Josuttis)</td>
+</tr>
+<tr>
+<td>Templates</td>
+<td><em>C++ Templates: The Complete Guide</em> (Vandevoorde, Josuttis and Gregor)</td>
+</tr>
+<tr>
+<td>Concurrency</td>
+<td><em>C++ Concurrency in Action</em> (Williams, 2nd ed.)</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td><em>Optimized C++</em> (Guntheroth); Agner Fog's free optimisation manuals</td>
+</tr>
+<tr>
+<td>Reference</td>
+<td><a href="https://en.cppreference.com">cppreference.com</a>: bookmark it and use it daily</td>
+</tr>
+</tbody>
+</table>
+<h2 id="five-capstone-projects">Five capstone projects</h2>
+<ol>
+<li><strong>A 2D game with your own engine</strong>: ECS, fixed timestep, sprite batching with OpenGL, sound, an editor built with Dear ImGui.</li>
+<li><strong>A deep-learning library</strong>: tensors with strides and broadcasting, autograd, a blocked and threaded CPU matmul, optional CUDA kernels, then train a small convolutional network on MNIST.</li>
+<li><strong>A real-time ray tracer</strong>: BVH, multithreading, SIMD, and a denoiser; compare CPU and GPU versions.</li>
+<li><strong>A trading-system skeleton</strong>: a binary market-data parser, order books for many symbols, a toy strategy, risk checks, a simulated exchange, and end-to-end latency percentiles.</li>
+<li><strong>A database engine</strong>: a B-tree on memory-mapped pages, a write-ahead log, a simple SQL parser, and concurrent readers.</li>
+</ol>
+<p>Each of them uses everything in this course. Pick the one that excites you most, write a short design document first, and build it in small, tested, measured steps.</p>
+<p>Good luck, and enjoy C++.</p>
+      <label class="donebox"><input type="checkbox" id="done"> I've finished this chapter</label>
+      <nav class="pager" aria-label="Chapter navigation"><a class="prev" href="37-testing.html"><small>Previous</small>36 · Testing, tooling and code quality</a><a class="next" href="../index.html"><small>Back to</small>Contents</a></nav>
+      <footer>Every example on this page was compiled with g++ 13 (<code>-std=c++23 -O2 -Wall -Wextra</code>) and run when the page was built; the output shown is real.</footer>
+    </article>
+  </main>
+</div>
+<script src="../assets/app.js"></script>
+</body></html>

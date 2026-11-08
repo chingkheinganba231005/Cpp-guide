@@ -177,6 +177,63 @@
     paint();
   };
 
+  // Order book: price-time priority matching, the same rules as the chapter's C++ engine
+  W.orderbook = function (w) {
+    let book = { bid: [], ask: [] }, trades = [], nextId = 1;
+    const seed = () => {
+      book = { bid: [], ask: [] }; trades = []; nextId = 1;
+      [[99, 30], [99, 10], [98, 50], [97, 20]].forEach(([p, q]) => rest("bid", p, q));
+      [[101, 25], [101, 15], [102, 40], [104, 60]].forEach(([p, q]) => rest("ask", p, q));
+    };
+    const rest = (side, price, qty) => book[side].push({ id: nextId++, price, qty, t: nextId });
+    const best = (side) => book[side].slice().sort((a, b) => (side === "bid" ? b.price - a.price : a.price - b.price) || a.t - b.t)[0];
+    const submit = (side, type, price, qty) => {
+      const opp = side === "buy" ? "ask" : "bid", fills = [];
+      while (qty > 0) {
+        const o = best(opp);
+        if (!o) break;
+        const crosses = type === "market" || (side === "buy" ? price >= o.price : price <= o.price);
+        if (!crosses) break;
+        const q = Math.min(qty, o.qty);
+        fills.push({ price: o.price, qty: q, maker: o.id });
+        o.qty -= q; qty -= q;
+        if (!o.qty) book[opp] = book[opp].filter((x) => x !== o);
+      }
+      fills.forEach((f) => trades.unshift(`${side.toUpperCase()} ${f.qty} @ ${f.price} (against order #${f.maker})`));
+      if (qty > 0 && type === "limit") rest(side === "buy" ? "bid" : "ask", price, qty);
+      msg.textContent = fills.length ? `Filled ${fills.reduce((a, f) => a + f.qty, 0)} in ${fills.length} trade(s)` + (qty > 0 ? (type === "limit" ? `; ${qty} rests in the book at ${price}` : `; ${qty} unfilled (no more liquidity)`) : "")
+                                     : type === "limit" ? `No match: order rests in the book at ${price}` : "No liquidity on the other side";
+      render();
+    };
+    const ladder = h("div"), tradeBox = h("div", { class: "mem-out" }), msg = h("div", { class: "mem-note" });
+    const levels = (side) => {
+      const m = new Map();
+      book[side].forEach((o) => m.set(o.price, (m.get(o.price) || []).concat(o)));
+      return [...m.entries()].sort((a, b) => b[0] - a[0]);
+    };
+    const render = () => {
+      const row = (price, orders, side) => h("div", { class: "cell" + (side === "ask" ? "" : " ptr") },
+        h("span", { class: "nm", style: `color:var(--${side === "ask" ? "red" : "green"})` }, `${side === "ask" ? "ASK" : "BID"} ${price}`),
+        h("span", { class: "ad" }, orders.map((o) => `#${o.id}:${o.qty}`).join("  ")), h("span", { class: "vl" }, orders.reduce((a, o) => a + o.qty, 0)));
+      const asks = levels("ask"), bids = levels("bid"), bb = bids[0], ba = asks[asks.length - 1];
+      ladder.replaceChildren(h("div", { class: "region" }, h("div", { class: "region-h" }, "Order book (orders queue in time order at each price)"),
+        asks.map(([p, os]) => row(p, os, "ask")),
+        h("div", { class: "cell" }, h("span", { class: "nm" }, bb && ba ? `spread ${ba[0] - bb[0]}` : "—"), h("span"), h("span")),
+        bids.map(([p, os]) => row(p, os, "bid"))));
+      tradeBox.textContent = trades.slice(0, 8).join("\n") || "No trades yet.";
+    };
+    const side = h("select", { "aria-label": "Side" }, h("option", { value: "buy" }, "Buy"), h("option", { value: "sell" }, "Sell"));
+    const type = h("select", { "aria-label": "Order type" }, h("option", { value: "limit" }, "Limit"), h("option", { value: "market" }, "Market"));
+    const price = h("input", { type: "number", value: "101", step: "1", "aria-label": "Price", style: "width:6em" });
+    const qty = h("input", { type: "number", value: "30", min: "1", step: "1", "aria-label": "Quantity", style: "width:6em" });
+    w.append(h("div", { class: "widget-h" }, w.dataset.title || "Order book"),
+      h("div", { class: "wctl" }, side, type, h("label", null, "price ", price), h("label", null, "qty ", qty),
+        h("button", { class: "wbtn pri", type: "button", onclick: () => { const q = Math.max(1, Math.floor(+qty.value)); submit(side.value, type.value, Math.floor(+price.value), q); } }, "Submit order"),
+        h("button", { class: "wbtn", type: "button", onclick: () => { seed(); msg.textContent = ""; render(); } }, "Reset")),
+      h("div", { class: "mem" }, ladder, h("div", null, msg, h("div", { class: "widget-h", style: "margin-top:10px" }, "Recent trades"), tradeBox)));
+    seed(); render();
+  };
+
   window.GUC = { W, h, $, $$ };
   document.addEventListener("DOMContentLoaded", () => {});
   $$("[data-widget]").forEach((w) => { const f = W[w.dataset.widget]; if (f) { w.classList.add("widget"); try { f(w); } catch (e) { console.error(e); w.append(h("p", null, "This interactive part failed to load.")); } } });
